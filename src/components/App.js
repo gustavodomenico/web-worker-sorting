@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import {Button, ButtonToolbar, Table} from 'react-bootstrap';
+import {Button, ButtonToolbar, ProgressBar, Table} from 'react-bootstrap';
 import {Card} from 'react-bootstrap';
 import {Container} from "react-bootstrap";
 import {Row} from "react-bootstrap";
@@ -26,13 +26,28 @@ class App extends React.Component {
 
         const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 100000) + k));
 
-        const worker = WebWorker();
-        worker.postMessage({message: "start", array: array});
+        this.worker = WebWorker();
+        this.worker.postMessage({message: "start", array: array});
 
         var self = this;
-        worker.onmessage = function (e) {
-            self.setState({ message: e.data.message });
+        this.worker.onmessage = function (e) {
+            if (e.data.message === "progress") {
+                self.setState({progress: e.data.value});
+                self.setState({message: e.data.value});
+            }
+            else
+                self.setState({ message: e.data.message });
         };
+    };
+
+    stopProcessing(event) {
+        console.log("app stop");
+        this.worker.postMessage({message: "pause"});
+    };
+
+    resumeProcessing(event) {
+        console.log("app resume");
+        this.worker.postMessage({message: "resume"});
     };
 
     setInterval(event) {
@@ -75,6 +90,7 @@ class App extends React.Component {
                                         <th>Worker Name</th>
                                         <th>Status</th>
                                         <th>Last Message</th>
+                                        <th>Progress</th>
                                         <th/>
                                     </tr>
                                     </thead>
@@ -85,10 +101,12 @@ class App extends React.Component {
                                         <td>{this.state.status}</td>
                                         <td>{this.state.message}</td>
                                         <td>
+                                            <ProgressBar animated max={100000} now={this.state.progress} />
+                                        </td>
+                                        <td>
                                             <ButtonToolbar>
-                                                <Button variant={"secondary"} size={"sm"}>Resume</Button>
-                                                <Button variant={"secondary"} size={"sm"}>Pause</Button>
-                                                <Button variant={"warning"} size={"sm"}>Stop</Button>
+                                                <Button variant={"success"} size={"sm"} onClick={(v) => this.resumeProcessing(v)}>Resume</Button>
+                                                <Button variant={"danger"} size={"sm"} onClick={(v) => this.stopProcessing(v)}>Pause</Button>
                                             </ButtonToolbar>
                                         </td>
                                     </tr>
