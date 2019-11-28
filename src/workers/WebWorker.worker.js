@@ -3,10 +3,9 @@ import InsertionSort from "../algorithm/InsertionSort";
 onmessage = function (e) {
     switch (e.data.message) {
         case "start":
-            console.log("start");
+            postMessage({message: "Started"});
             let result = InsertionSort.sort(e.data.array);
-            console.log("end");
-            postMessage(result);
+            postMessage({message: "Finished"});
             break;
 
         default:

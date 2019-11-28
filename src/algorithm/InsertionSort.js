@@ -1,16 +1,19 @@
 export default class InsertionSort {
     static sortFrom(array, startIndex) {
-        let length = array.length;
+        // Do not change the input array
+        let result = array.slice();
+
+        let length = result.length;
         for (let i = startIndex + 1; i < length; i++) {
-            let key = array[i];
+            let key = result[i];
             let j = i - 1;
-            while (j >= startIndex && array[j] > key) {
-                array[j + 1] = array[j];
+            while (j >= startIndex && result[j] > key) {
+                result[j + 1] = result[j];
                 j = j - 1;
             }
-            array[j + 1] = key;
+            result[j + 1] = key;
         }
-        return array;
+        return result;
     };
 
     static sort(array) {
