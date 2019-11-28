@@ -13,4 +13,6 @@ https://stackoverflow.com/questions/42567535/resolving-imports-using-webpacks-wo
 Missing
 
 use a bundler like Webpack
-browser support
+browser support for workers
+method guards asserts
+error handling
