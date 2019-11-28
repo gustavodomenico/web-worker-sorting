@@ -8,14 +8,14 @@ import {Row} from "react-bootstrap";
 import {Col} from "react-bootstrap";
 import {Form} from "react-bootstrap";
 
-import WebWorkerSetup from "../worker/WebWorkerSetup";
-import WebWorker from "../worker/WebWorker";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 
 function App() {
     const startProcessing = event => {
         const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 100000) + k));
 
-        const worker = new WebWorkerSetup(WebWorker);
+        const worker = WebWorker();
         worker.postMessage({message: "start", array: array});
 
         worker.onmessage = function (e) {
