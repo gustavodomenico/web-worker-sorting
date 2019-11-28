@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { Button } from 'react-bootstrap';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <Button variant="primary">Primary</Button>
         <a
           className="App-link"
           href="https://reactjs.org"
