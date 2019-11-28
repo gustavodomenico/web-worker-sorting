@@ -12,10 +12,17 @@ import WebWorkerSetup from "../worker/WebWorkerSetup";
 import WebWorker from "../worker/WebWorker";
 
 function App() {
-    const handle = event => {
+    const startProcessing = event => {
+        const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 100000) + k));
+
         const worker = new WebWorkerSetup(WebWorker);
-        worker.postMessage("Fetch Users");
+        worker.postMessage({message: "start", array: array});
+
+        worker.onmessage = function (e) {
+            console.log('Message Worker: ' + e.data);
+        };
     };
+
     return (
         <Container>
             <Row>
@@ -29,10 +36,10 @@ function App() {
                                         Message interval (ms):
                                     </Form.Label>
                                     <Col sm={9}>
-                                        <Form.Control type="number" placeholder="Interval"/>
+                                        <Form.Control type="number" placeholder="Message interval (ms)"/>
                                     </Col>
                                 </Form.Group>
-                                <Button variant="primary" onClick={handle}>Start</Button>
+                                <Button variant="primary" onClick={startProcessing}>Start</Button>
                             </Form>
                         </Card.Body>
                     </Card>

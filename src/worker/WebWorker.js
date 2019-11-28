@@ -1,5 +1,15 @@
+import InsertionSort from "../algorithm/InsertionSort";
+
 export default () => {
     onmessage = function (e) {
-        console.log("Received");
+        switch (e.data.message) {
+            case "start":
+                let result = InsertionSort.sort(e.data.array);
+                postMessage(result);
+                break;
+
+            default:
+                break;
+        }
     };
 }
