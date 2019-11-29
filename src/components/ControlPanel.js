@@ -11,14 +11,14 @@ const ControlPanel = props =>
                 <Form.Control type="number" placeholder="New number interval (ms)"
                               defaultValue={props.newNumberInterval}
                               disabled={props.started ? "disabled" : ""}
-                              onChange={(text) => props.onIntervalChance(text)}/>
+                              onChange={(text) => props.onIntervalChange(text)}/>
             </Col>
         </Form.Group>
         <Button variant="primary"
-                onClick={() => props.onStartProcessing()}
+                onClick={() => props.onStartButtonClick()}
                 disabled={props.hasStarted ? "disabled" : ""}>Start</Button>&nbsp;
         <Button variant="primary"
-                onClick={() => props.onStopProcessing()}
+                onClick={() => props.onStopButtonClick()}
                 disabled={!props.hasStarted ? "disabled" : ""}>Stop</Button>
     </Form>;
 
