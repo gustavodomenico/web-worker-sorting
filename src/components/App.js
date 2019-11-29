@@ -10,6 +10,7 @@ import {Form} from "react-bootstrap";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
+import Messages from "../common/Messages";
 
 class App extends React.Component {
     constructor(props) {
@@ -27,14 +28,15 @@ class App extends React.Component {
         const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 10000) + k));
 
         this.worker = WebWorker();
-        this.worker.postMessage({message: "start", array: array});
+        this.worker.postMessage({message: Messages.START, array: array});
 
         var self = this;
+
         this.worker.onmessage = function (e) {
-            if (e.data.message === "progress") {
+            if (e.data.message === Messages.PROGRESS) {
                 self.setState({progress: e.data.value});
                 self.setState({message: e.data.value});
-            } else if (e.data.message === "end") {
+            } else if (e.data.message === Messages.FINISHED) {
                 self.setState({status: "Finished"});
 
                 console.log(e.data.value.length);
@@ -54,7 +56,7 @@ class App extends React.Component {
         };
 
         this.clock = setInterval(function () {
-            self.worker.postMessage({message: "add", value: Math.floor((Math.random() * 100000))});
+            self.worker.postMessage({message: Messages.ADD_NUMBER, value: Math.floor((Math.random() * 100000))});
         }, this.state.interval);
     };
 
@@ -64,12 +66,12 @@ class App extends React.Component {
         this.setState({started: false});
     };
 
-    stopProcessing(event) {
-        this.worker.postMessage({message: "pause"});
+    pauseProcessing(event) {
+        this.worker.postMessage({message: Messages.PAUSE});
     };
 
     resumeProcessing(event) {
-        this.worker.postMessage({message: "resume"});
+        this.worker.postMessage({message: Messages.RESUME});
     };
 
     setInterval(event) {
@@ -134,7 +136,7 @@ class App extends React.Component {
                                                 <Button variant={"secondary"} size={"sm"}
                                                         onClick={(v) => this.resumeProcessing(v)}>Resume</Button>
                                                 <Button variant={"secondary"} size={"sm"}
-                                                        onClick={(v) => this.stopProcessing(v)}>Pause</Button>
+                                                        onClick={(v) => this.pauseProcessing(v)}>Pause</Button>
                                             </ButtonToolbar>
                                         </td>
                                     </tr>

@@ -1,36 +1,33 @@
 import ExecutionContext from "./ExecutionContext";
+import Messages from "../common/Messages";
 
 let context = new ExecutionContext();
 
 onmessage = function (e) {
     switch (e.data.message) {
-        case "start":
-            postMessage({message: "Working"});
-
+        case Messages.START:
             const onProgress = (index) => {
                 if ((index + 1) % 5000 === 0)
-                    postMessage({message: "progress", value: index + 1});
+                    postMessage({message: Messages.PROGRESS, value: index + 1});
             };
 
             const onFinished = (array) => {
-                postMessage({message: "end", value: array});
+                postMessage({message: Messages.FINISHED, value: array});
             };
 
             context.run(e.data.array, onProgress, onFinished);
 
             break;
 
-        case "pause":
+        case Messages.PAUSE:
             context.pause();
-            postMessage({message: "Paused"});
             break;
 
-        case "resume":
+        case Messages.RESUME:
             context.resume();
-            postMessage({message: "Working"});
             break;
 
-        case "add":
+        case Messages.ADD_NUMBER:
             context.add(1);
             break;
 
