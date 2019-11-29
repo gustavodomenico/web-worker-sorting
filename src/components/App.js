@@ -7,11 +7,10 @@ import ControlPanel from "./ControlPanel";
 import WorkersTable from "./WorkersTable";
 
 import Messages from "../common/Messages";
+import WebWorkerPool from "../workers/WebWorkerPool";
+
 // import Configuration from "../common/Configuration";
 // import IsArraySorted from "../algorithm/IsArraySorted";
-
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 
 class App extends React.Component {
     constructor(props) {
@@ -21,11 +20,11 @@ class App extends React.Component {
             workers: [],
             interval: 250,
             started: false,
-            workersCount: 2
+            workersCount: 1
         }
     };
 
-    startProcessing() {
+    handleStartButtonClick() {
         // const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
         //
         // this.worker = WebWorker();
@@ -39,11 +38,15 @@ class App extends React.Component {
             message: "0"
         }));
 
+        this.webWorkerPool = new WebWorkerPool();
+        this.webWorkerPool.start(workersCount);
+
         this.setState(
             {
                 started: true,
                 workers: workers
             });
+
 
         // const self = this;
         // this.worker.onmessage = function (e) {
@@ -67,18 +70,11 @@ class App extends React.Component {
         // }, this.state.interval);
     };
 
-    stopProcessing() {
+    handleStopButtonClick() {
         // this.worker.terminate();
         // clearInterval(this.clock);
+        this.webWorkerPool.stop();
         this.setState({started: false});
-    };
-
-    pauseProcessing() {
-        this.worker.postMessage({message: Messages.PAUSE});
-    };
-
-    resumeProcessing() {
-        this.worker.postMessage({message: Messages.RESUME});
     };
 
     handleIntervalChange(event) {
@@ -87,6 +83,14 @@ class App extends React.Component {
 
     handleWorkersCountChange(event) {
         this.setState({workersCount: parseInt(event.target.value)});
+    };
+
+    pauseProcessing() {
+        this.worker.postMessage({message: Messages.PAUSE});
+    };
+
+    resumeProcessing() {
+        this.worker.postMessage({message: Messages.RESUME});
     };
 
     render() {
@@ -99,8 +103,8 @@ class App extends React.Component {
                             <Card.Header>Web Worker Sorting</Card.Header>
                             <Card.Body>
                                 <ControlPanel
-                                    onStartButtonClick={() => this.startProcessing()}
-                                    onStopButtonClick={() => this.stopProcessing()}
+                                    onStartButtonClick={() => this.handleStartButtonClick()}
+                                    onStopButtonClick={() => this.handleStopButtonClick()}
                                     onIntervalChange={(e) => this.handleIntervalChange(e)}
                                     onWorkersCountChange={(e) => this.handleWorkersCountChange(e)}
 
