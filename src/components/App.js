@@ -7,9 +7,9 @@ import ControlPanel from "./ControlPanel";
 import WorkersTable from "./WorkersTable";
 
 import Messages from "../common/Messages";
+import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
 
-// import Configuration from "../common/Configuration";
 // import IsArraySorted from "../algorithm/IsArraySorted";
 
 class App extends React.Component {
@@ -20,16 +20,11 @@ class App extends React.Component {
             workers: [],
             interval: 250,
             started: false,
-            workersCount: 1
+            workersCount: 2
         }
     };
 
     handleStartButtonClick() {
-        // const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
-        //
-        // this.worker = WebWorker();
-        // this.worker.postMessage({message: Messages.START, array: array});
-
         const workersCount = this.state.workersCount;
         let workers = [...Array(workersCount).keys()].map((n) => ({
             id: n,
@@ -38,15 +33,24 @@ class App extends React.Component {
             message: "0"
         }));
 
+        const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
+
+        const onWorkerFinished = (id, m) => {
+            this.setState(prevState => ({
+                workers: prevState.workers.map(
+                    el => el.id === id? { ...el, status: 'Finished' }: el
+                )
+            }))
+        };
+
         this.webWorkerPool = new WebWorkerPool();
-        this.webWorkerPool.start(workersCount);
+        this.webWorkerPool.start(workersCount, array, onWorkerFinished);
 
         this.setState(
             {
                 started: true,
                 workers: workers
             });
-
 
         // const self = this;
         // this.worker.onmessage = function (e) {
@@ -82,7 +86,8 @@ class App extends React.Component {
     };
 
     handleWorkersCountChange(event) {
-        this.setState({workersCount: parseInt(event.target.value)});
+        if (event.target.value)
+            this.setState({workersCount: parseInt(event.target.value)});
     };
 
     pauseProcessing() {

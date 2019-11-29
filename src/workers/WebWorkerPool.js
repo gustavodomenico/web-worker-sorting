@@ -1,3 +1,5 @@
+import Messages from "../common/Messages";
+
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 
@@ -6,8 +8,22 @@ export default class WebWorkerPool {
         this.workers = [];
     }
 
-    start(workersCount) {
-        this.workers = [...Array(workersCount).keys()].map((n) => WebWorker());
+    start(workersCount, array, onWorkerFinished) {
+        this.workers = [...Array(workersCount).keys()].map((n) => {
+            const w = WebWorker();
+            w.postMessage({message: Messages.START, array: array});
+
+            const messageCallbacks = new Map([
+                [Messages.DONE, (n, e) => onWorkerFinished(n, e)],
+            ]);
+
+            w.onmessage = (m) => {
+                if (messageCallbacks.has(m.data.message))
+                    messageCallbacks.get(m.data.message)(n, m);
+            };
+
+            return w;
+        });
     }
 
     stop() {
