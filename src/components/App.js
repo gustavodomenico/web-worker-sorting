@@ -2,43 +2,23 @@ import React from 'react';
 import './App.css';
 
 import {Card, Container, Row, Col} from 'react-bootstrap';
-
 import ControlPanel from "./ControlPanel";
 import WorkersTable from "./WorkersTable";
+import ResultModal from "./ResultModal";
 
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
-import ResultModal from "./ResultModal";
-
-// import IsArraySorted from "../algorithm/IsArraySorted";
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            workers: [],
-            interval: 250,
-            started: false,
-            showResults: false,
-            workersCount: 2,
-            originalArray: [],
-            sortedArray: []
-        }
+        this.state = Configuration.INITIAL_STATE;
     };
 
     handleStartButtonClick() {
         const workersCount = this.state.workersCount;
-        let workers = [...Array(workersCount).keys()].map((n) => ({
-            id: n,
-            isPaused: false,
-            isFinished: false,
-            progress: 0,
-            status: "Working",
-            size: Configuration.ARRAY_SIZE
-        }));
-
-        const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
+        const workers = Configuration.createWorkers(this.state.workersCount);
+        const array = Configuration.createArray();
 
         const onWorkerFinished = (id, m) => {
             this.setState(prevState => ({
@@ -65,15 +45,10 @@ class App extends React.Component {
         };
 
         this.webWorkerPool = new WebWorkerPool();
-        this.webWorkerPool.start(workersCount,
-            array, this.state.interval, onWorkerFinished, onWorkerProgress, onWorkerUpdated);
+        this.webWorkerPool.start(workersCount, array, this.state.interval, onWorkerFinished, onWorkerProgress,
+            onWorkerUpdated);
 
-        this.setState(
-            {
-                started: true,
-                workers: workers,
-                originalArray: array
-            });
+        this.setState({started: true, workers: workers, originalArray: array});
     };
 
     handleStopButtonClick() {
@@ -133,7 +108,6 @@ class App extends React.Component {
                                     onStopButtonClick={() => this.handleStopButtonClick()}
                                     onIntervalChange={(e) => this.handleIntervalChange(e)}
                                     onWorkersCountChange={(e) => this.handleWorkersCountChange(e)}
-
                                     hasStarted={this.state.started}
                                     newNumberInterval={this.state.interval}
                                     workersCount={this.state.workersCount}

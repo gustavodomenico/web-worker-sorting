@@ -18,3 +18,4 @@ method guards asserts
 error handling
 stateless compoenents react
 check ; consistency
+verificar os let x const
