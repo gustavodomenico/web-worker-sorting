@@ -37,7 +37,7 @@ class App extends React.Component {
                 self.setState({progress: e.data.value});
                 self.setState({message: e.data.value});
             } else if (e.data.message === Messages.FINISHED) {
-                self.setState({status: "Finished"});
+                self.setState({status: "Finished " + e.data.value.length});
                 self.worker.terminate();
                 console.log(IsArraySorted.check(e.data.value));
                 self.setState({message: e.data.value.length});

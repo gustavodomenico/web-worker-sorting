@@ -16,3 +16,4 @@ use a bundler like Webpack
 browser support for workers
 method guards asserts
 error handling
+stateless compoenents react
