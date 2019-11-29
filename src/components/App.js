@@ -1,18 +1,17 @@
 import React from 'react';
 import './App.css';
 
+import {Card, Container, Row, Col} from 'react-bootstrap';
 import {Button, ButtonToolbar, ProgressBar, Table} from 'react-bootstrap';
-import {Card} from 'react-bootstrap';
-import {Container} from "react-bootstrap";
-import {Row} from "react-bootstrap";
-import {Col} from "react-bootstrap";
-import {Form} from "react-bootstrap";
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
+import ControlPanel from "./ControlPanel";
+
 import Messages from "../common/Messages";
 import Configuration from "../common/Configuration";
 import IsArraySorted from "../algorithm/IsArraySorted";
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 
 class App extends React.Component {
     constructor(props) {
@@ -48,11 +47,14 @@ class App extends React.Component {
         };
 
         this.clock = setInterval(function () {
-            self.worker.postMessage({message: Messages.ADD_NUMBER, value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))});
+            self.worker.postMessage({
+                message: Messages.ADD_NUMBER,
+                value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))
+            });
         }, this.state.interval);
     };
 
-    abortProcessing(event) {
+    stopProcessing(event) {
         this.worker.terminate();
         clearInterval(this.clock);
         this.setState({started: false});
@@ -76,30 +78,18 @@ class App extends React.Component {
         return (
             <Container>
                 <Row>
-                    <Col />
+                    <Col/>
                     <Col sm={9}>
                         <Card>
                             <Card.Header>Web Worker Sorting</Card.Header>
                             <Card.Body>
-                                <Form>
-                                    <Form.Group as={Row} controlId="formHorizontalEmail">
-                                        <Form.Label column sm={3}>
-                                            Message interval (ms):
-                                        </Form.Label>
-                                        <Col sm={9}>
-                                            <Form.Control type="number" placeholder="Message interval (ms)"
-                                                          defaultValue={this.state.interval}
-                                                          disabled={this.state.started ? "disabled" : ""}
-                                                          onChange={(v) => this.setInterval(v)}/>
-                                        </Col>
-                                    </Form.Group>
-                                    <Button variant="primary"
-                                            onClick={(v) => this.startProcessing(v)}
-                                            disabled={this.state.started ? "disabled" : ""}>Start</Button>&nbsp;
-                                    <Button variant="primary"
-                                            onClick={(v) => this.abortProcessing(v)}
-                                            disabled={!this.state.started ? "disabled" : ""}>Stop</Button>
-                                </Form>
+                                <ControlPanel
+                                    onStartProcessing={(e) => this.startProcessing(e)}
+                                    onStopProcessing={(e) => this.stopProcessing(e)}
+                                    hasStarted={this.state.started}
+                                    newNumberInterval={this.state.interval}
+                                />
+
                                 <br/>
 
                                 {this.state.started &&
@@ -137,7 +127,7 @@ class App extends React.Component {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col />
+                    <Col/>
                 </Row>
             </Container>
         );
