@@ -12,6 +12,7 @@ import {Form} from "react-bootstrap";
 import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 import Messages from "../common/Messages";
 import Configuration from "../common/Configuration";
+import IsArraySorted from "../algorithm/IsArraySorted";
 
 class App extends React.Component {
     constructor(props) {
@@ -39,19 +40,9 @@ class App extends React.Component {
                 self.setState({message: e.data.value});
             } else if (e.data.message === Messages.FINISHED) {
                 self.setState({status: "Finished"});
-
-                console.log(e.data.value.length);
-                console.log(array.length);
-
-                let sorted = true;
-                for (let i = 0; i < e.data.value.length - 1; i++) {
-                    if (e.data.value[i] > e.data.value[i+1]) {
-                        sorted = false;
-                        break;
-                    }
-                }
-                console.log(sorted);
-
+                self.worker.terminate();
+                console.log(IsArraySorted.check(e.data.value));
+                self.setState({message: e.data.value.length});
             } else
                 self.setState({status: e.data.message});
         };
@@ -116,7 +107,6 @@ class App extends React.Component {
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Worker Name</th>
                                         <th>Status</th>
                                         <th>Last Message</th>
                                         <th>Progress</th>
@@ -126,7 +116,6 @@ class App extends React.Component {
                                     <tbody>
                                     <tr>
                                         <td>0</td>
-                                        <td>Inspire</td>
                                         <td>{this.state.status}</td>
                                         <td>{this.state.message}</td>
                                         <td>
@@ -135,7 +124,7 @@ class App extends React.Component {
                                         <td>
                                             <ButtonToolbar>
                                                 <Button variant={"secondary"} size={"sm"}
-                                                        onClick={(v) => this.resumeProcessing(v)}>Resume</Button>
+                                                        onClick={(v) => this.resumeProcessing(v)}>Resume</Button>&nbsp;&nbsp;
                                                 <Button variant={"secondary"} size={"sm"}
                                                         onClick={(v) => this.pauseProcessing(v)}>Pause</Button>
                                             </ButtonToolbar>

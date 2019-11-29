@@ -17,7 +17,7 @@ export default class ExecutionContext {
         const processor = setInterval(function () {
             if (!busy && !self.paused) {
                 busy = true;
-                InsertionSort.sortStepping(self.array, index, Configuration.CHUNK_SIZE, onProgress);
+                InsertionSort.sortChunk(self.array, index, Configuration.CHUNK_SIZE, onProgress);
                 index += Configuration.CHUNK_SIZE;
 
                 if (index >= self.array.length) {

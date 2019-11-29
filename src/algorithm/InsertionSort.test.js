@@ -18,7 +18,7 @@ it('sorts the array from an index with a specific step', () => {
     const input = [5, 14, 2, 1, 3, 7, 12, 6];
     const output = [1, 2, 3, 5, 14, 7, 12, 6];
 
-    expect(InsertionSort.sortStepping(input, 1, 4)).toEqual(output);
+    expect(InsertionSort.sortChunk(input, 1, 4)).toEqual(output);
 });
 
 it('works on empty arrays', () => {
