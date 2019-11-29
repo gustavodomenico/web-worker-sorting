@@ -7,11 +7,11 @@ import ControlPanel from "./ControlPanel";
 import WorkersTable from "./WorkersTable";
 
 import Messages from "../common/Messages";
-import Configuration from "../common/Configuration";
-import IsArraySorted from "../algorithm/IsArraySorted";
+// import Configuration from "../common/Configuration";
+// import IsArraySorted from "../algorithm/IsArraySorted";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
+// import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 
 class App extends React.Component {
     constructor(props) {
@@ -20,8 +20,8 @@ class App extends React.Component {
         this.state = {
             workers: [],
             interval: 250,
-            workersCount: 2,
-            started: false
+            started: false,
+            workersCount: 2
         }
     };
 
@@ -31,17 +31,19 @@ class App extends React.Component {
         // this.worker = WebWorker();
         // this.worker.postMessage({message: Messages.START, array: array});
 
-        this.setState({started: true});
-
-        console.log(this.state.workersCount)
-        let workers = [...Array(this.state.workersCount).keys()].map((n) => ({
+        const workersCount = this.state.workersCount;
+        let workers = [...Array(workersCount).keys()].map((n) => ({
             id: n,
             progress: 0,
             status: "Working",
             message: "0"
         }));
 
-        this.setState({workers: workers});
+        this.setState(
+            {
+                started: true,
+                workers: workers
+            });
 
         // const self = this;
         // this.worker.onmessage = function (e) {
@@ -84,7 +86,7 @@ class App extends React.Component {
     };
 
     handleWorkersCountChange(event) {
-        this.setState({workersCount: event.target.value});
+        this.setState({workersCount: parseInt(event.target.value)});
     };
 
     render() {
@@ -108,7 +110,7 @@ class App extends React.Component {
                                 />
                                 <br/>
                                 {this.state.started &&
-                                    <WorkersTable workers={this.state.workers}/>
+                                <WorkersTable workers={this.state.workers}/>
                                 }
                             </Card.Body>
                         </Card>
