@@ -33,6 +33,7 @@ class App extends React.Component {
 
         this.setState({started: true});
 
+        console.log(this.state.workersCount)
         let workers = [...Array(this.state.workersCount).keys()].map((n) => ({
             id: n,
             progress: 0,
