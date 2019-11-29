@@ -24,9 +24,9 @@ const WorkersTable = props =>
                 <td>
                     <ButtonToolbar>
                         <Button variant={"secondary"} size={"sm"}
-                                onClick={() => props.onResumeButtonClick()}>Resume</Button>&nbsp;&nbsp;
+                                onClick={() => props.onResumeButtonClick(worker.id)}>Resume</Button>&nbsp;&nbsp;
                         <Button variant={"secondary"} size={"sm"}
-                                onClick={() => props.onPauseButtonClick()}>Pause</Button>
+                                onClick={() => props.onPauseButtonClick(worker.id)}>Pause</Button>
                     </ButtonToolbar>
                 </td>
             </tr>);

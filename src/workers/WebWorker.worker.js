@@ -3,8 +3,6 @@ import Messages from "../common/Messages";
 
 function messageHandler(context) {
     return function (e) {
-        console.log("message received from context");
-
         const onProgress = (index) => {
             if ((index + 1) % 5000 === 0)
                 postMessage({message: Messages.PROGRESS, value: index + 1});

@@ -33,4 +33,12 @@ export default class WebWorkerPool {
     stop() {
         this.workers.forEach((w) => w.terminate());
     }
+
+    pause(id) {
+        this.workers[id].postMessage({message: Messages.PAUSE});
+    }
+
+    resume(id) {
+        this.workers[id].postMessage({message: Messages.RESUME});
+    }
 }

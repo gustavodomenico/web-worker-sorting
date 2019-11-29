@@ -39,7 +39,7 @@ class App extends React.Component {
         const onWorkerFinished = (id, m) => {
             this.setState(prevState => ({
                 workers: prevState.workers.map(
-                    el => el.id === id? { ...el, status: 'Done' }: el
+                    el => el.id === id ? {...el, status: 'Done'} : el
                 )
             }))
         };
@@ -47,7 +47,7 @@ class App extends React.Component {
         const onWorkerProgress = (id, m) => {
             this.setState(prevState => ({
                 workers: prevState.workers.map(
-                    el => el.id === id? { ...el, status: 'Working', progress: m.data.value }: el
+                    el => el.id === id ? {...el, status: 'Working', progress: m.data.value} : el
                 )
             }))
         };
@@ -70,27 +70,26 @@ class App extends React.Component {
     };
 
     handleStopButtonClick() {
-        // this.worker.terminate();
         // clearInterval(this.clock);
         this.webWorkerPool.stop();
         this.setState({started: false});
     };
 
-    handleIntervalChange(event) {
-        this.setState({interval: event.target.value});
+    handleIntervalChange(e) {
+        this.setState({interval: e.target.value});
     };
 
-    handleWorkersCountChange(event) {
-        if (event.target.value)
-            this.setState({workersCount: parseInt(event.target.value)});
+    handleWorkersCountChange(e) {
+        if (e.target.value)
+            this.setState({workersCount: parseInt(e.target.value)});
     };
 
-    pauseProcessing() {
-        this.worker.postMessage({message: Messages.PAUSE});
+    handlePauseButtonClick(w) {
+        this.webWorkerPool.pause(w);
     };
 
-    resumeProcessing() {
-        this.worker.postMessage({message: Messages.RESUME});
+    handleResumeButtonClick(w) {
+        this.webWorkerPool.resume(w);
     };
 
     render() {
@@ -114,7 +113,11 @@ class App extends React.Component {
                                 />
                                 <br/>
                                 {this.state.started &&
-                                <WorkersTable workers={this.state.workers}/>
+                                <WorkersTable
+                                    workers={this.state.workers}
+                                    onPauseButtonClick={(w) => this.handlePauseButtonClick(w)}
+                                    onResumeButtonClick={(w) => this.handleResumeButtonClick(w)}
+                                />
                                 }
                             </Card.Body>
                         </Card>
