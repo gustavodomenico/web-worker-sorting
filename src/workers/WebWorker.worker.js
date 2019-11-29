@@ -1,22 +1,29 @@
 import ExecutionContext from "./ExecutionContext";
 import Messages from "../common/Messages";
+import Configuration from "../common/Configuration";
 
 function messageHandler(context) {
     return function (e) {
         const onProgress = (index) => {
-            if ((index + 1) % 5000 === 0)
-                postMessage({message: Messages.PROGRESS, value: index + 1});
+            const numbersProcessed = index + 1;
+            if (numbersProcessed % Configuration.CHUNK_SIZE === 0)
+                postMessage({message: Messages.PROGRESS, value: numbersProcessed});
         };
 
         const onFinished = (array) => {
-            postMessage({message: Messages.FINISHED, value: array});
+            postMessage({message: Messages.PROGRESS, value: array.length});
+            postMessage({message: Messages.DONE, value: array});
+        };
+
+        const onNewNumberAdded = (array) => {
+            postMessage({message: Messages.UPDATED, value: array.length});
         };
 
         const messageCallbacks = new Map([
             [Messages.START, (data) => context.run(data.array, onProgress, onFinished)],
             [Messages.PAUSE, () => context.pause()],
             [Messages.RESUME, () => context.resume()],
-            [Messages.ADD_NUMBER, (data) => context.add(data.value)]
+            [Messages.ADD_NUMBER, (data) => context.add(data.value, onNewNumberAdded)]
         ]);
 
         messageCallbacks.get(e.data.message)(e.data);

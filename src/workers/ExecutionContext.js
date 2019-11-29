@@ -37,7 +37,8 @@ export default class ExecutionContext {
         this.paused = false;
     }
 
-    add(number) {
+    add(number, onNewNumberAdded) {
         this.array.push(number);
+        onNewNumberAdded(this.array);
     }
 }
