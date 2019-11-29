@@ -18,44 +18,55 @@ class App extends React.Component {
         super(props);
 
         this.state = {
+            workers: [],
             interval: 250,
+            workersCount: 2,
             started: false
         }
     };
 
     startProcessing() {
+        // const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
+        //
+        // this.worker = WebWorker();
+        // this.worker.postMessage({message: Messages.START, array: array});
+
         this.setState({started: true});
 
-        const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
+        let workers = [...Array(this.state.workersCount).keys()].map((n) => ({
+            id: n,
+            progress: 0,
+            status: "Working",
+            message: "0"
+        }));
 
-        this.worker = WebWorker();
-        this.worker.postMessage({message: Messages.START, array: array});
+        this.setState({workers: workers});
 
-        const self = this;
-        this.worker.onmessage = function (e) {
-            if (e.data.message === Messages.PROGRESS) {
-                self.setState({progress: e.data.value});
-                self.setState({message: e.data.value});
-            } else if (e.data.message === Messages.FINISHED) {
-                self.setState({status: "Finished " + e.data.value.length});
-                self.worker.terminate();
-                console.log(IsArraySorted.check(e.data.value));
-                self.setState({message: e.data.value.length});
-            } else
-                self.setState({status: e.data.message});
-        };
+        // const self = this;
+        // this.worker.onmessage = function (e) {
+        //     if (e.data.message === Messages.PROGRESS) {
+        //         self.setState({progress: e.data.value});
+        //         self.setState({message: e.data.value});
+        //     } else if (e.data.message === Messages.FINISHED) {
+        //         self.setState({status: "Finished " + e.data.value.length});
+        //         self.worker.terminate();
+        //         console.log(IsArraySorted.check(e.data.value));
+        //         self.setState({message: e.data.value.length});
+        //     } else
+        //         self.setState({status: e.data.message});
+        // };
 
-        this.clock = setInterval(function () {
-            self.worker.postMessage({
-                message: Messages.ADD_NUMBER,
-                value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))
-            });
-        }, this.state.interval);
+        // this.clock = setInterval(function () {
+        //     self.worker.postMessage({
+        //         message: Messages.ADD_NUMBER,
+        //         value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))
+        //     });
+        // }, this.state.interval);
     };
 
     stopProcessing() {
-        this.worker.terminate();
-        clearInterval(this.clock);
+        // this.worker.terminate();
+        // clearInterval(this.clock);
         this.setState({started: false});
     };
 
@@ -67,10 +78,12 @@ class App extends React.Component {
         this.worker.postMessage({message: Messages.RESUME});
     };
 
-    setInterval(event) {
-        this.setState({
-            interval: event.target.value
-        });
+    handleIntervalChange(event) {
+        this.setState({interval: event.target.value});
+    };
+
+    handleWorkersCountChange(event) {
+        this.setState({workersCount: event.target.value});
     };
 
     render() {
@@ -85,20 +98,16 @@ class App extends React.Component {
                                 <ControlPanel
                                     onStartButtonClick={() => this.startProcessing()}
                                     onStopButtonClick={() => this.stopProcessing()}
-                                    onIntervalChange={(e) => this.setInterval(e)}
+                                    onIntervalChange={(e) => this.handleIntervalChange(e)}
+                                    onWorkersCountChange={(e) => this.handleWorkersCountChange(e)}
+
                                     hasStarted={this.state.started}
                                     newNumberInterval={this.state.interval}
+                                    workersCount={this.state.workersCount}
                                 />
                                 <br/>
                                 {this.state.started &&
-                                <WorkersTable
-                                    onResumeButtonClick={() => this.resumeProcessing()}
-                                    onPauseButtonClick={() => this.pauseProcessing()}
-                                    max={100000}
-                                    progress={this.state.progress}
-                                    status={this.state.status}
-                                    message={this.state.message}
-                                />
+                                    <WorkersTable workers={this.state.workers}/>
                                 }
                             </Card.Body>
                         </Card>

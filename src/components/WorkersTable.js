@@ -13,23 +13,26 @@ const WorkersTable = props =>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>0</td>
-            <td>{props.status}</td>
-            <td>{props.message}</td>
-            <td>
-                <ProgressBar animated max={props.max} now={props.progress}/>
-            </td>
-            <td>
-                <ButtonToolbar>
-                    <Button variant={"secondary"} size={"sm"}
-                            onClick={() => props.onResumeButtonClick()}>Resume</Button>&nbsp;&nbsp;
-                    <Button variant={"secondary"} size={"sm"}
-                            onClick={() => props.onPauseButtonClick()}>Pause</Button>
-                </ButtonToolbar>
-            </td>
-        </tr>
+        {props.workers.map(worker => {
+            return (<tr key={worker.id}>
+                <td>{worker.id}</td>
+                <td>{worker.status}</td>
+                <td>{worker.message}</td>
+                <td>
+                    <ProgressBar animated max={worker.max} now={worker.progress}/>
+                </td>
+                <td>
+                    <ButtonToolbar>
+                        <Button variant={"secondary"} size={"sm"}
+                                onClick={() => props.onResumeButtonClick()}>Resume</Button>&nbsp;&nbsp;
+                        <Button variant={"secondary"} size={"sm"}
+                                onClick={() => props.onPauseButtonClick()}>Pause</Button>
+                    </ButtonToolbar>
+                </td>
+            </tr>);
+        })
+        }
         </tbody>
-    </Table>
+    </Table>;
 
 export default WorkersTable;
