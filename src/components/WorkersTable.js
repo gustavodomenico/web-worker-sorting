@@ -2,7 +2,7 @@ import {Button, ButtonToolbar, ProgressBar, Table} from "react-bootstrap";
 import React from "react";
 
 const WorkersTable = props =>
-    <Table bordered>
+    <Table bordered size="sm">
         <thead>
         <tr>
             <th>#</th>
@@ -19,14 +19,16 @@ const WorkersTable = props =>
                 <td>{worker.status}</td>
                 <td>{worker.message}</td>
                 <td>
-                    <ProgressBar animated max={worker.size} now={worker.progress}/>
+                    <ProgressBar max={worker.size} now={worker.progress} label={`${worker.progress} items`}/>
                 </td>
-                <td>
+                <td width={175}>
                     <ButtonToolbar>
                         <Button variant={"secondary"} size={"sm"}
-                                onClick={() => props.onResumeButtonClick(worker.id)}>Resume</Button>&nbsp;&nbsp;
-                        <Button variant={"secondary"} size={"sm"}
+                                disabled={worker.isPaused ? "disabled" : ""}
                                 onClick={() => props.onPauseButtonClick(worker.id)}>Pause</Button>
+                        <Button variant={"secondary"} size={"sm"}
+                                disabled={!worker.isPaused ? "disabled" : ""}
+                                onClick={() => props.onResumeButtonClick(worker.id)}>Resume</Button>
                     </ButtonToolbar>
                 </td>
             </tr>);

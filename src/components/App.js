@@ -28,6 +28,7 @@ class App extends React.Component {
         const workersCount = this.state.workersCount;
         let workers = [...Array(workersCount).keys()].map((n) => ({
             id: n,
+            isPaused: false,
             progress: 0,
             status: "Working",
             message: "0",
@@ -47,7 +48,7 @@ class App extends React.Component {
         const onWorkerProgress = (id, m) => {
             this.setState(prevState => ({
                 workers: prevState.workers.map(
-                    el => el.id === id ? {...el, status: 'Working', progress: m.data.value} : el
+                    el => el.id === id ? {...el, status: 'Working', progress: m.data.value, message: m.data.value} : el
                 )
             }))
         };
@@ -86,10 +87,20 @@ class App extends React.Component {
 
     handlePauseButtonClick(w) {
         this.webWorkerPool.pause(w);
+        this.setState(prevState => ({
+            workers: prevState.workers.map(
+                el => el.id === w ? {...el, isPaused: true} : el
+            )
+        }))
     };
 
     handleResumeButtonClick(w) {
         this.webWorkerPool.resume(w);
+        this.setState(prevState => ({
+            workers: prevState.workers.map(
+                el => el.id === w ? {...el, isPaused: false} : el
+            )
+        }))
     };
 
     render() {
