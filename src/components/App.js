@@ -24,7 +24,7 @@ class App extends React.Component {
     startProcessing(event) {
         this.setState({started: true});
 
-        const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 100000) + k));
+        const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 10000) + k));
 
         this.worker = WebWorker();
         this.worker.postMessage({message: "start", array: array});
@@ -34,19 +34,39 @@ class App extends React.Component {
             if (e.data.message === "progress") {
                 self.setState({progress: e.data.value});
                 self.setState({message: e.data.value});
-            }
-            else
-                self.setState({ message: e.data.message });
+            } else if (e.data.message === "end") {
+                console.log(e.data.value.length);
+                console.log(array.length);
+
+                let sorted = true;
+                for (let i = 0; i < e.data.value.length - 1; i++) {
+                    if (e.data.value[i] > e.data.value[i+1]) {
+                        sorted = false;
+                        break;
+                    }
+                }
+                console.log(sorted);
+
+            } else
+                self.setState({status: e.data.message});
         };
+
+        this.clock = setInterval(function () {
+            self.worker.postMessage({message: "add", value: Math.floor((Math.random() * 100000))});
+        }, this.state.interval);
+    };
+
+    abortProcessing(event) {
+        this.worker.terminate();
+        clearInterval(this.clock);
+        this.setState({started: false});
     };
 
     stopProcessing(event) {
-        console.log("app stop");
         this.worker.postMessage({message: "pause"});
     };
 
     resumeProcessing(event) {
-        console.log("app resume");
         this.worker.postMessage({message: "resume"});
     };
 
@@ -78,7 +98,10 @@ class App extends React.Component {
                                     </Form.Group>
                                     <Button variant="primary"
                                             onClick={(v) => this.startProcessing(v)}
-                                            disabled={this.state.started ? "disabled" : ""}>Start</Button>
+                                            disabled={this.state.started ? "disabled" : ""}>Start</Button>&nbsp;
+                                    <Button variant="primary"
+                                            onClick={(v) => this.abortProcessing(v)}
+                                            disabled={!this.state.started ? "disabled" : ""}>Stop</Button>
                                 </Form>
                                 <br/>
 
@@ -101,12 +124,14 @@ class App extends React.Component {
                                         <td>{this.state.status}</td>
                                         <td>{this.state.message}</td>
                                         <td>
-                                            <ProgressBar animated max={100000} now={this.state.progress} />
+                                            <ProgressBar animated max={100000} now={this.state.progress}/>
                                         </td>
                                         <td>
                                             <ButtonToolbar>
-                                                <Button variant={"success"} size={"sm"} onClick={(v) => this.resumeProcessing(v)}>Resume</Button>
-                                                <Button variant={"danger"} size={"sm"} onClick={(v) => this.stopProcessing(v)}>Pause</Button>
+                                                <Button variant={"secondary"} size={"sm"}
+                                                        onClick={(v) => this.resumeProcessing(v)}>Resume</Button>
+                                                <Button variant={"secondary"} size={"sm"}
+                                                        onClick={(v) => this.stopProcessing(v)}>Pause</Button>
                                             </ButtonToolbar>
                                         </td>
                                     </tr>

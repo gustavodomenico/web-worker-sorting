@@ -8,15 +8,15 @@ it('sorts the array', () => {
 });
 
 it('sorts the array from a specific index', () => {
-    const input = [5, 2, 2, 1, 3];
-    const output = [5, 1, 2, 2, 3];
+    const input = [5, 2, 8, 1, 3];
+    const output = [1, 5, 2, 3, 8];
 
-    expect(InsertionSort.sortFromIndex(input, 1)).toEqual(output);
+    expect(InsertionSort.sortFromIndex(input, 2)).toEqual(output);
 });
 
-it('sorts the array from an index until a specific range', () => {
+it('sorts the array from an index with a specific step', () => {
     const input = [5, 14, 2, 1, 3, 7, 12, 6];
-    const output = [5, 1, 2, 3, 14, 7, 12, 6];
+    const output = [1, 2, 3, 5, 14, 7, 12, 6];
 
     expect(InsertionSort.sortStepping(input, 1, 4)).toEqual(output);
 });
@@ -28,9 +28,10 @@ it('works on empty arrays', () => {
     expect(InsertionSort.sortFromIndex(input)).toEqual(output);
 });
 
-it('works on empty arrays', () => {
-    const input = [];
-    const output = [];
+it('calls the on progress callback for each index', () => {
+    let callback = jest.fn();
 
-    expect(InsertionSort.sortFromIndex(input)).toEqual(output);
+    InsertionSort.sort([1, 2, 3], callback);
+
+    expect(callback).toHaveBeenCalledTimes(3);
 });

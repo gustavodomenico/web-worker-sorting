@@ -6,27 +6,25 @@ let array = [];
 onmessage = function (e) {
     switch (e.data.message) {
         case "start":
-            postMessage({message: "Started"});
-
-            const watcher = {
-                onProgress: (index) => {
-                    if ((index + 1) % 5000 === 0)
-                        postMessage({message: "progress", value: index + 1});
-                },
-            };
-
             array = e.data.array;
 
-            let index = 0;
+            postMessage({message: "Working"});
+
+            const onProgress = (index) => {
+                if ((index + 1) % 5000 === 0)
+                    postMessage({message: "progress", value: index + 1});
+            };
+
             let busy = false;
+            let index = 0;
             const processor = setInterval(function () {
                 if (!busy && !paused) {
                     busy = true;
-                    InsertionSort.sortStepping(array, index, 5000, watcher)
+                    InsertionSort.sortStepping(array, index, 5000, onProgress)
                     index += 5000;
                     if (index >= array.length) {
                         clearInterval(processor);
-                        postMessage({message: "Finished"});
+                        postMessage({message: "end", value: array});
                     }
                     busy = false;
                 }
@@ -34,13 +32,17 @@ onmessage = function (e) {
             break;
 
         case "pause":
-            console.log("pause received");
+            postMessage({message: "Paused"});
             paused = true;
             break;
 
         case "resume":
-            console.log("resume received");
+            postMessage({message: "Working"});
             paused = false;
+            break;
+
+        case "add":
+            array.push(1);
             break;
 
         default:
