@@ -1,4 +1,5 @@
 import InsertionSort from "../algorithm/InsertionSort";
+import Configuration from "../common/Configuration";
 
 export default class ExecutionContext {
     constructor() {
@@ -11,20 +12,21 @@ export default class ExecutionContext {
 
         let busy = false;
         let index = 0;
-        let self = this;
 
+        let self = this;
         const processor = setInterval(function () {
             if (!busy && !self.paused) {
                 busy = true;
-                InsertionSort.sortStepping(self.array, index, 5000, onProgress);
-                index += 5000;
+                InsertionSort.sortStepping(self.array, index, Configuration.CHUNK_SIZE, onProgress);
+                index += Configuration.CHUNK_SIZE;
+
                 if (index >= self.array.length) {
                     clearInterval(processor);
-                    onFinished(self.array);
+                    if(onFinished) onFinished(self.array);
                 }
                 busy = false;
             }
-        }, 500);
+        }, Configuration.POLLING_INTERVAL);
     }
 
     pause() {

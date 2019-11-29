@@ -11,6 +11,7 @@ import {Form} from "react-bootstrap";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 import Messages from "../common/Messages";
+import Configuration from "../common/Configuration";
 
 class App extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class App extends React.Component {
     startProcessing(event) {
         this.setState({started: true});
 
-        const array = Array.from({length: 100000}, (v, k) => Math.floor((Math.random() * 10000) + k));
+        const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
 
         this.worker = WebWorker();
         this.worker.postMessage({message: Messages.START, array: array});
@@ -56,7 +57,7 @@ class App extends React.Component {
         };
 
         this.clock = setInterval(function () {
-            self.worker.postMessage({message: Messages.ADD_NUMBER, value: Math.floor((Math.random() * 100000))});
+            self.worker.postMessage({message: Messages.ADD_NUMBER, value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))});
         }, this.state.interval);
     };
 
