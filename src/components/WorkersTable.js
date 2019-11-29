@@ -7,7 +7,6 @@ const WorkersTable = props =>
         <tr>
             <th>#</th>
             <th>Status</th>
-            <th>Last Message</th>
             <th>Progress</th>
             <th/>
         </tr>
@@ -16,8 +15,7 @@ const WorkersTable = props =>
         {props.workers.map(worker => {
             return (<tr key={worker.id}>
                 <td>{worker.id}</td>
-                <td>{worker.status}</td>
-                <td>{worker.message}</td>
+                <td width={150}>{worker.status}</td>
                 <td>
                     <ProgressBar max={worker.size} now={worker.progress} label={`${worker.progress} items`}/>
                 </td>

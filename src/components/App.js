@@ -6,7 +6,6 @@ import {Card, Container, Row, Col} from 'react-bootstrap';
 import ControlPanel from "./ControlPanel";
 import WorkersTable from "./WorkersTable";
 
-import Messages from "../common/Messages";
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
 
@@ -31,7 +30,6 @@ class App extends React.Component {
             isPaused: false,
             progress: 0,
             status: "Working",
-            message: "0",
             size: Configuration.ARRAY_SIZE
         }));
 
@@ -48,30 +46,31 @@ class App extends React.Component {
         const onWorkerProgress = (id, m) => {
             this.setState(prevState => ({
                 workers: prevState.workers.map(
-                    el => el.id === id ? {...el, status: 'Working', progress: m.data.value, message: m.data.value} : el
+                    el => el.id === id ? {...el, status: 'Working...', progress: m.data.value} : el
+                )
+            }))
+        };
+
+        const onWorkerUpdated = (id, m) => {
+            this.setState(prevState => ({
+                workers: prevState.workers.map(
+                    el => el.id === id ? {...el, size: m.data.value} : el
                 )
             }))
         };
 
         this.webWorkerPool = new WebWorkerPool();
-        this.webWorkerPool.start(workersCount, array, onWorkerFinished, onWorkerProgress);
+        this.webWorkerPool.start(workersCount,
+            array, this.state.interval, onWorkerFinished, onWorkerProgress, onWorkerUpdated);
 
         this.setState(
             {
                 started: true,
                 workers: workers
             });
-
-        // this.clock = setInterval(function () {
-        //     self.worker.postMessage({
-        //         message: Messages.ADD_NUMBER,
-        //         value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))
-        //     });
-        // }, this.state.interval);
     };
 
     handleStopButtonClick() {
-        // clearInterval(this.clock);
         this.webWorkerPool.stop();
         this.setState({started: false});
     };
@@ -89,7 +88,7 @@ class App extends React.Component {
         this.webWorkerPool.pause(w);
         this.setState(prevState => ({
             workers: prevState.workers.map(
-                el => el.id === w ? {...el, isPaused: true} : el
+                el => el.id === w ? {...el, status: "Paused", isPaused: true} : el
             )
         }))
     };

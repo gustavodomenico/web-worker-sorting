@@ -5,4 +5,5 @@ export default class Messages {
     static ADD_NUMBER = "add_number";
     static DONE = "done";
     static PROGRESS = "progress";
+    static UPDATED = "updated";
 }
