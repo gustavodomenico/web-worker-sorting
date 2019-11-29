@@ -1,5 +1,5 @@
-import {Button, ButtonToolbar, ProgressBar, Table} from "react-bootstrap";
 import React from "react";
+import {Button, ButtonToolbar, ProgressBar, Table} from "react-bootstrap";
 
 const WorkersTable = props =>
     <Table bordered size="sm">
@@ -19,14 +19,17 @@ const WorkersTable = props =>
                 <td>
                     <ProgressBar max={worker.size} now={worker.progress} label={`${worker.progress} items`}/>
                 </td>
-                <td width={175}>
+                <td width={280}>
                     <ButtonToolbar>
-                        <Button variant={"secondary"} size={"sm"}
+                        <Button variant={"info"} size={"sm"}
                                 disabled={worker.isPaused ? "disabled" : ""}
                                 onClick={() => props.onPauseButtonClick(worker.id)}>Pause</Button>
-                        <Button variant={"secondary"} size={"sm"}
+                        <Button variant={"info"} size={"sm"}
                                 disabled={!worker.isPaused ? "disabled" : ""}
                                 onClick={() => props.onResumeButtonClick(worker.id)}>Resume</Button>
+                        <Button variant={"success"} size={"sm"}
+                                disabled={!worker.isFinished ? "disabled" : ""}
+                                onClick={() => props.onResultsButtonClick(worker.id)}>Results</Button>
                     </ButtonToolbar>
                 </td>
             </tr>);

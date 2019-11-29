@@ -8,6 +8,7 @@ import WorkersTable from "./WorkersTable";
 
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
+import ResultModal from "./ResultModal";
 
 // import IsArraySorted from "../algorithm/IsArraySorted";
 
@@ -19,7 +20,10 @@ class App extends React.Component {
             workers: [],
             interval: 250,
             started: false,
-            workersCount: 2
+            showResults: false,
+            workersCount: 2,
+            originalArray: [],
+            sortedArray: []
         }
     };
 
@@ -28,6 +32,7 @@ class App extends React.Component {
         let workers = [...Array(workersCount).keys()].map((n) => ({
             id: n,
             isPaused: false,
+            isFinished: false,
             progress: 0,
             status: "Working",
             size: Configuration.ARRAY_SIZE
@@ -38,7 +43,7 @@ class App extends React.Component {
         const onWorkerFinished = (id, m) => {
             this.setState(prevState => ({
                 workers: prevState.workers.map(
-                    el => el.id === id ? {...el, status: 'Done'} : el
+                    el => el.id === id ? {...el, status: 'Done', isFinished: true, sortedArray: m.data.value} : el
                 )
             }))
         };
@@ -66,7 +71,8 @@ class App extends React.Component {
         this.setState(
             {
                 started: true,
-                workers: workers
+                workers: workers,
+                originalArray: array
             });
     };
 
@@ -102,6 +108,17 @@ class App extends React.Component {
         }))
     };
 
+    handleResultsButtonClick(w) {
+        this.setState({
+            showResults: true,
+            sortedArray: this.state.workers[w].sortedArray
+        });
+    };
+
+    handleResultsModalHide() {
+        this.setState({showResults: false});
+    }
+
     render() {
         return (
             <Container>
@@ -127,6 +144,7 @@ class App extends React.Component {
                                     workers={this.state.workers}
                                     onPauseButtonClick={(w) => this.handlePauseButtonClick(w)}
                                     onResumeButtonClick={(w) => this.handleResumeButtonClick(w)}
+                                    onResultsButtonClick={(w) => this.handleResultsButtonClick(w)}
                                 />
                                 }
                             </Card.Body>
@@ -134,6 +152,11 @@ class App extends React.Component {
                     </Col>
                     <Col/>
                 </Row>
+                <ResultModal originalArray={this.state.originalArray}
+                             sortedArray={this.state.sortedArray}
+                             show={this.state.showResults}
+                             onHide={() => this.handleResultsModalHide()}
+                />
             </Container>
         );
     }
