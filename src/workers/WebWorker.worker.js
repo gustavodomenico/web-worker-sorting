@@ -1,13 +1,10 @@
-import InsertionSort from "../algorithm/InsertionSort";
+import ExecutionContext from "./ExecutionContext";
 
-let paused = false;
-let array = [];
+let context = new ExecutionContext();
 
 onmessage = function (e) {
     switch (e.data.message) {
         case "start":
-            array = e.data.array;
-
             postMessage({message: "Working"});
 
             const onProgress = (index) => {
@@ -15,34 +12,26 @@ onmessage = function (e) {
                     postMessage({message: "progress", value: index + 1});
             };
 
-            let busy = false;
-            let index = 0;
-            const processor = setInterval(function () {
-                if (!busy && !paused) {
-                    busy = true;
-                    InsertionSort.sortStepping(array, index, 5000, onProgress)
-                    index += 5000;
-                    if (index >= array.length) {
-                        clearInterval(processor);
-                        postMessage({message: "end", value: array});
-                    }
-                    busy = false;
-                }
-            }, 500);
+            const onFinished = (array) => {
+                postMessage({message: "end", value: array});
+            };
+
+            context.run(e.data.array, onProgress, onFinished);
+
             break;
 
         case "pause":
+            context.pause();
             postMessage({message: "Paused"});
-            paused = true;
             break;
 
         case "resume":
+            context.resume();
             postMessage({message: "Working"});
-            paused = false;
             break;
 
         case "add":
-            array.push(1);
+            context.add(1);
             break;
 
         default:

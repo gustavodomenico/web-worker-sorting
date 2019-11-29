@@ -35,6 +35,8 @@ class App extends React.Component {
                 self.setState({progress: e.data.value});
                 self.setState({message: e.data.value});
             } else if (e.data.message === "end") {
+                self.setState({status: "Finished"});
+
                 console.log(e.data.value.length);
                 console.log(array.length);
 
@@ -80,7 +82,8 @@ class App extends React.Component {
         return (
             <Container>
                 <Row>
-                    <Col>
+                    <Col />
+                    <Col sm={9}>
                         <Card>
                             <Card.Header>Web Worker Sorting</Card.Header>
                             <Card.Body>
@@ -142,6 +145,7 @@ class App extends React.Component {
                             </Card.Body>
                         </Card>
                     </Col>
+                    <Col />
                 </Row>
             </Container>
         );
