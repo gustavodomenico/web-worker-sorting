@@ -19,7 +19,7 @@ const WorkersTable = props =>
                 <td>{worker.status}</td>
                 <td>{worker.message}</td>
                 <td>
-                    <ProgressBar animated max={worker.max} now={worker.progress}/>
+                    <ProgressBar animated max={worker.size} now={worker.progress}/>
                 </td>
                 <td>
                     <ButtonToolbar>

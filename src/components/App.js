@@ -30,7 +30,8 @@ class App extends React.Component {
             id: n,
             progress: 0,
             status: "Working",
-            message: "0"
+            message: "0",
+            size: Configuration.ARRAY_SIZE
         }));
 
         const array = Array.from({length: Configuration.ARRAY_SIZE}, (v, k) => Math.floor((Math.random() * Configuration.ARRAY_SIZE) + k));
@@ -38,33 +39,27 @@ class App extends React.Component {
         const onWorkerFinished = (id, m) => {
             this.setState(prevState => ({
                 workers: prevState.workers.map(
-                    el => el.id === id? { ...el, status: 'Finished' }: el
+                    el => el.id === id? { ...el, status: 'Done' }: el
+                )
+            }))
+        };
+
+        const onWorkerProgress = (id, m) => {
+            this.setState(prevState => ({
+                workers: prevState.workers.map(
+                    el => el.id === id? { ...el, status: 'Working', progress: m.data.value }: el
                 )
             }))
         };
 
         this.webWorkerPool = new WebWorkerPool();
-        this.webWorkerPool.start(workersCount, array, onWorkerFinished);
+        this.webWorkerPool.start(workersCount, array, onWorkerFinished, onWorkerProgress);
 
         this.setState(
             {
                 started: true,
                 workers: workers
             });
-
-        // const self = this;
-        // this.worker.onmessage = function (e) {
-        //     if (e.data.message === Messages.PROGRESS) {
-        //         self.setState({progress: e.data.value});
-        //         self.setState({message: e.data.value});
-        //     } else if (e.data.message === Messages.FINISHED) {
-        //         self.setState({status: "Finished " + e.data.value.length});
-        //         self.worker.terminate();
-        //         console.log(IsArraySorted.check(e.data.value));
-        //         self.setState({message: e.data.value.length});
-        //     } else
-        //         self.setState({status: e.data.message});
-        // };
 
         // this.clock = setInterval(function () {
         //     self.worker.postMessage({

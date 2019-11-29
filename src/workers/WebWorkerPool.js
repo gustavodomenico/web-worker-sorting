@@ -8,13 +8,17 @@ export default class WebWorkerPool {
         this.workers = [];
     }
 
-    start(workersCount, array, onWorkerFinished) {
+    start(workersCount, array, onWorkerDone, onWorkerProgress) {
         this.workers = [...Array(workersCount).keys()].map((n) => {
             const w = WebWorker();
             w.postMessage({message: Messages.START, array: array});
 
             const messageCallbacks = new Map([
-                [Messages.DONE, (n, e) => onWorkerFinished(n, e)],
+                [Messages.DONE, (n, e) => {
+                    w.terminate();
+                    onWorkerDone(n, e);
+                }],
+                [Messages.PROGRESS, (n, e) => onWorkerProgress(n, e)]
             ]);
 
             w.onmessage = (m) => {
