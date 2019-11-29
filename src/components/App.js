@@ -17,7 +17,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            interval: 0,
+            interval: 250,
             started: false
         }
     };

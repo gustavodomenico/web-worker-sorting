@@ -1,37 +1,31 @@
 import ExecutionContext from "./ExecutionContext";
 import Messages from "../common/Messages";
 
-let context = new ExecutionContext();
+function messageHandler(context) {
+    return function (e) {
+        const onProgress = (index) => {
+            if ((index + 1) % 5000 === 0)
+                postMessage({message: Messages.PROGRESS, value: index + 1});
+        };
 
-onmessage = function (e) {
-    switch (e.data.message) {
-        case Messages.START:
-            const onProgress = (index) => {
-                if ((index + 1) % 5000 === 0)
-                    postMessage({message: Messages.PROGRESS, value: index + 1});
-            };
+        const onFinished = (array) => {
+            postMessage({message: Messages.FINISHED, value: array});
+        };
 
-            const onFinished = (array) => {
-                postMessage({message: Messages.FINISHED, value: array});
-            };
+        const messageCallbacks = new Map([
+            [Messages.START, (data) => context.run(data.array, onProgress, onFinished)],
+            [Messages.PAUSE, () => context.pause()],
+            [Messages.RESUME, () => context.resume()],
+            [Messages.ADD_NUMBER, (data) => context.add(data.value)]
+        ]);
 
-            context.run(e.data.array, onProgress, onFinished);
-
-            break;
-
-        case Messages.PAUSE:
-            context.pause();
-            break;
-
-        case Messages.RESUME:
-            context.resume();
-            break;
-
-        case Messages.ADD_NUMBER:
-            context.add(1);
-            break;
-
-        default:
-            break;
+        messageCallbacks.get(e.data.message)(e.data);
     }
-};
+}
+
+// eslint-disable-next-line no-restricted-globals
+self.onmessage = messageHandler(new ExecutionContext());
+
+// I am not very familiar with javascript/babel modules, the line below was to make the unit testing possible
+if (module.exports)
+    module.exports = messageHandler;
