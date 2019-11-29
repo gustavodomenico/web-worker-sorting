@@ -1,17 +1,7 @@
 export default class Configuration {
-    static ARRAY_SIZE = 50000;
+    static ARRAY_SIZE = 10000;
     static CHUNK_SIZE = 5000;
     static POLLING_INTERVAL = 500;
-
-    static INITIAL_STATE = {
-        workers: [],
-        interval: 250,
-        started: false,
-        showResults: false,
-        workersCount: 2,
-        originalArray: [],
-        sortedArray: []
-    };
 
     static createWorkers(workersCount) {
         return [...Array(workersCount).keys()].map((n) => ({

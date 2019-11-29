@@ -22,11 +22,13 @@ const WorkersTable = props =>
                 <td width={280}>
                     <ButtonToolbar>
                         <Button variant={"info"} size={"sm"}
-                                disabled={worker.isPaused ? "disabled" : ""}
+                                disabled={worker.isFinished || worker.isPaused ? "disabled" : ""}
                                 onClick={() => props.onPauseButtonClick(worker.id)}>Pause</Button>
+
                         <Button variant={"info"} size={"sm"}
-                                disabled={!worker.isPaused ? "disabled" : ""}
+                                disabled={worker.isFinished || !worker.isPaused ? "disabled" : ""}
                                 onClick={() => props.onResumeButtonClick(worker.id)}>Resume</Button>
+
                         <Button variant={"success"} size={"sm"}
                                 disabled={!worker.isFinished ? "disabled" : ""}
                                 onClick={() => props.onResultsButtonClick(worker.id)}>Results</Button>

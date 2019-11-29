@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 import {Card, Container, Row, Col} from 'react-bootstrap';
@@ -9,131 +9,96 @@ import ResultModal from "./ResultModal";
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = Configuration.INITIAL_STATE;
-    };
+const webWorkerPool = new WebWorkerPool();
 
-    handleStartButtonClick() {
-        const workersCount = this.state.workersCount;
-        const workers = Configuration.createWorkers(this.state.workersCount);
+function App() {
+    const [workers, setWorkers] = useState([]);
+    const [interval, setInterval] = useState(250);
+    const [started, setStarted] = useState(false);
+    const [showResults, setShowResults] = useState(false);
+    const [workersCount, setWorkersCount] = useState(2);
+    const [originalArray, setOriginalArray] = useState([]);
+    const [sortedArray, setSortedArray] = useState([]);
+
+    const handleStartButtonClick = () => {
         const array = Configuration.createArray();
 
         const onWorkerFinished = (id, m) => {
-            this.setState(prevState => ({
-                workers: prevState.workers.map(
-                    el => el.id === id ? {...el, status: 'Done', isFinished: true, sortedArray: m.data.value} : el
-                )
-            }))
+            setWorkers(prev => prev.map(el => el.id === id ?
+                {...el, status: 'Done', isFinished: true, sortedArray: m.data.value} : el));
         };
-
         const onWorkerProgress = (id, m) => {
-            this.setState(prevState => ({
-                workers: prevState.workers.map(
-                    el => el.id === id ? {...el, status: 'Working...', progress: m.data.value} : el
-                )
-            }))
-        };
+            setWorkers(prev => prev.map(el => el.id === id ?
+                {...el, status: 'Working...', progress: m.data.value} : el));};
 
         const onWorkerUpdated = (id, m) => {
-            this.setState(prevState => ({
-                workers: prevState.workers.map(
-                    el => el.id === id ? {...el, size: m.data.value} : el
-                )
-            }))
-        };
+            setWorkers(prev => prev.map(el => el.id === id ? {...el, size: m.data.value} : el));};
 
-        this.webWorkerPool = new WebWorkerPool();
-        this.webWorkerPool.start(workersCount, array, this.state.interval, onWorkerFinished, onWorkerProgress,
-            onWorkerUpdated);
+        webWorkerPool.start(workersCount, array, interval,
+            onWorkerFinished, onWorkerProgress, onWorkerUpdated);
 
-        this.setState({started: true, workers: workers, originalArray: array});
+        setStarted(true);
+        setWorkers(Configuration.createWorkers(workersCount));
+        setOriginalArray(array);
     };
 
-    handleStopButtonClick() {
-        this.webWorkerPool.stop();
-        this.setState({started: false});
+    const handleStopButtonClick = () => {
+        webWorkerPool.stop();
+        setStarted(false);
     };
 
-    handleIntervalChange(e) {
-        this.setState({interval: e.target.value});
+    const handlePauseButtonClick = (w) => {
+        webWorkerPool.pause(w);
+        setWorkers(prev => prev.map(el => el.id === w ? {...el, status: "Paused", isPaused: true} : el));};
+
+    const handleResumeButtonClick = (w) => {
+        webWorkerPool.resume(w);
+        setWorkers(prev => prev.map(el => el.id === w ? {...el, isPaused: false} : el));
     };
 
-    handleWorkersCountChange(e) {
-        if (e.target.value)
-            this.setState({workersCount: parseInt(e.target.value)});
+    const handleResultsButtonClick = (w) => {
+        setShowResults(true);
+        setSortedArray(workers[w].sortedArray);
     };
 
-    handlePauseButtonClick(w) {
-        this.webWorkerPool.pause(w);
-        this.setState(prevState => ({
-            workers: prevState.workers.map(
-                el => el.id === w ? {...el, status: "Paused", isPaused: true} : el
-            )
-        }))
-    };
-
-    handleResumeButtonClick(w) {
-        this.webWorkerPool.resume(w);
-        this.setState(prevState => ({
-            workers: prevState.workers.map(
-                el => el.id === w ? {...el, isPaused: false} : el
-            )
-        }))
-    };
-
-    handleResultsButtonClick(w) {
-        this.setState({
-            showResults: true,
-            sortedArray: this.state.workers[w].sortedArray
-        });
-    };
-
-    handleResultsModalHide() {
-        this.setState({showResults: false});
-    }
-
-    render() {
-        return (
-            <Container>
-                <Row>
-                    <Col/>
-                    <Col sm={9}>
-                        <Card>
-                            <Card.Header>Web Worker Sorting</Card.Header>
-                            <Card.Body>
-                                <ControlPanel
-                                    onStartButtonClick={() => this.handleStartButtonClick()}
-                                    onStopButtonClick={() => this.handleStopButtonClick()}
-                                    onIntervalChange={(e) => this.handleIntervalChange(e)}
-                                    onWorkersCountChange={(e) => this.handleWorkersCountChange(e)}
-                                    hasStarted={this.state.started}
-                                    newNumberInterval={this.state.interval}
-                                    workersCount={this.state.workersCount}
-                                />
-                                <br/>
-                                {this.state.started &&
-                                <WorkersTable
-                                    workers={this.state.workers}
-                                    onPauseButtonClick={(w) => this.handlePauseButtonClick(w)}
-                                    onResumeButtonClick={(w) => this.handleResumeButtonClick(w)}
-                                    onResultsButtonClick={(w) => this.handleResultsButtonClick(w)}
-                                />
-                                }
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col/>
-                </Row>
-                <ResultModal originalArray={this.state.originalArray}
-                             sortedArray={this.state.sortedArray}
-                             show={this.state.showResults}
-                             onHide={() => this.handleResultsModalHide()}
-                />
-            </Container>
-        );
-    }
+    return (
+        <Container>
+            <Row>
+                <Col/>
+                <Col sm={9}>
+                    <Card>
+                        <Card.Header>Web Worker Sorting</Card.Header>
+                        <Card.Body>
+                            <ControlPanel
+                                onStartButtonClick={() => handleStartButtonClick()}
+                                onStopButtonClick={() => handleStopButtonClick()}
+                                onIntervalChange={(e) => setInterval(e.target.value)}
+                                onWorkersCountChange={(e) => setWorkersCount(e.target.value ? parseInt(e.target.value) : 1)}
+                                hasStarted={started}
+                                newNumberInterval={interval}
+                                workersCount={workersCount}
+                            />
+                            <br/>
+                            {started &&
+                            <WorkersTable
+                                workers={workers}
+                                onPauseButtonClick={(w) => handlePauseButtonClick(w)}
+                                onResumeButtonClick={(w) => handleResumeButtonClick(w)}
+                                onResultsButtonClick={(w) => handleResultsButtonClick(w)}
+                            />
+                            }
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col/>
+            </Row>
+            <ResultModal originalArray={originalArray}
+                         sortedArray={sortedArray}
+                         show={showResults}
+                         onHide={() => setShowResults(false)}
+            />
+        </Container>
+    );
 }
 
 export default App;
