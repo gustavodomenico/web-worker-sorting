@@ -14,7 +14,7 @@ describe("processing workflow", () => {
     const wrapper = shallow(<App/>);
     const numberOfWorkers = wrapper.find(ControlPanel).prop("workersCount");
 
-    it("should be able to start processing", () => {
+    it("starts processing", () => {
         wrapper.find(ControlPanel).prop("onStartButtonClick")();
 
         expect(wrapper.find(WorkersTable).exists()).toBeTruthy();
@@ -22,22 +22,22 @@ describe("processing workflow", () => {
         expect(mockedWebWorkerPool.start).toHaveBeenCalledTimes(1);
     });
 
-    it("should be able to pause worker", () => {
+    it("pauses a worker", () => {
         wrapper.find(WorkersTable).prop("onPauseButtonClick")(0);
         expect(mockedWebWorkerPool.pause).toHaveBeenCalledTimes(1);
     });
 
-    it("should be able to resume worker", () => {
+    it("resumes a worker", () => {
         wrapper.find(WorkersTable).prop("onResultsButtonClick")(0);
         expect(wrapper.find(ResultModal).exists()).toBeTruthy();
     });
 
-    it("should be able to show results", () => {
+    it("shows results for a worker", () => {
         wrapper.find(WorkersTable).prop("onResumeButtonClick")(0);
         expect(mockedWebWorkerPool.resume).toHaveBeenCalledTimes(1);
     });
 
-    it("should be able to stop processing", () => {
+    it("stops processing", () => {
         wrapper.find(ControlPanel).prop("onStopButtonClick")();
 
         expect(wrapper.find(WorkersTable).exists()).toBeFalsy();

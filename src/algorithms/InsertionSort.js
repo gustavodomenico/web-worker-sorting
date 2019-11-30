@@ -1,5 +1,5 @@
 export default class InsertionSort {
-    static run(array, startIndex, chunk, onProgress) {
+     run(array, startIndex, chunk, onProgress) {
         let length = startIndex + chunk > array.length ?
             array.length :
             startIndex + chunk;

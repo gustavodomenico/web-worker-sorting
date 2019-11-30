@@ -4,23 +4,23 @@ import Configuration from "../common/Configuration";
 
 function messageHandler(context) {
     return function (e) {
-        const onProgress = index => {
+        const handleProgress = index => {
             const numbersProcessed = index + 1;
             if (numbersProcessed % Configuration.CHUNK_SIZE === 0)
                 postMessage({message: Messages.PROGRESS, value: numbersProcessed});
         };
 
-        const onFinished = array => {
+        const handleDone = array => {
             postMessage({message: Messages.PROGRESS, value: array.length});
             postMessage({message: Messages.DONE, value: array});
         };
 
         const onNewNumberAdded = (array, timestamp) => {
-            postMessage({message: Messages.UPDATED, value: array.length, timestamp: timestamp});
+            postMessage({message: Messages.ACKNOWLEDGE, value: array.length, timestamp: timestamp});
         };
 
         const messageCallbacks = new Map([
-            [Messages.START, data => context.run(data.array, onProgress, onFinished)],
+            [Messages.START, data => context.run(data.array, handleProgress, handleDone)],
             [Messages.PAUSE, () => context.pause()],
             [Messages.RESUME, () => context.resume()],
             [Messages.ADD_NUMBER, data => context.add(data, onNewNumberAdded)]

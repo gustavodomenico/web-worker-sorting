@@ -39,7 +39,7 @@ function App() {
                 {...el, status: "Working", progress: m.data.value} : el));
         };
 
-        const handleWorkerUpdated = (id, m) => {
+        const handleWorkerAcknowledged = (id, m) => {
             const lastMessageTime = Date.now() - (m.data.timestamp);
             setWorkers(prev =>
                 prev.map(el => el.id === id ?
@@ -47,7 +47,7 @@ function App() {
                     el));
         };
 
-        webWorkerPool.start(workers, interval, handleWorkerFinished, handleWorkerProgress, handleWorkerUpdated);
+        webWorkerPool.start(workers, interval, handleWorkerFinished, handleWorkerProgress, handleWorkerAcknowledged);
 
         setStarted(true);
         setWorkers(workers);

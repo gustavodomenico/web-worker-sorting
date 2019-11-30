@@ -16,14 +16,9 @@ Enzyne and disabled buttons
 
 Missing
 
-browser support for workers
-method guards asserts
-error handling
 
-revisit unit tests (exceptional cases)
 add snapshopts?
-revisit should nos testes
-revisti o nome evento Updated?! ACK?
+review scenarios describe?
 
 
 

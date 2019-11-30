@@ -8,7 +8,7 @@ export default class WebWorkerPool {
         this.clocks = [];
     }
 
-    start(workers, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerUpdated, webWorker) {
+    start(workers, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerAcknowledged, webWorker) {
         const self = this;
 
         this.webWorkers = workers.map(worker => {
@@ -22,7 +22,7 @@ export default class WebWorkerPool {
                     onWorkerDone(n, m);
                 }],
                 [Messages.PROGRESS, (n, m) => onWorkerProgress(n, m)],
-                [Messages.UPDATED, (n, m) => onWorkerUpdated(n, m)]
+                [Messages.ACKNOWLEDGE, (n, m) => onWorkerAcknowledged(n, m)]
             ]);
 
             w.onmessage = m => {

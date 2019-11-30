@@ -5,26 +5,27 @@ export default class ExecutionContext {
     constructor() {
         this.paused = false;
         this.array = [];
+        this.algorithm = new InsertionSort();
     }
 
-    run(array, onProgress, onFinished) {
+    run(array, onProgress, onDone) {
         this.array = array;
 
-        let busy = false;
-        let index = 0;
+        const self = this;
 
         // The only way to listen to new messages is doing the sorting in chunks
         // and process the new messages in between
-        let self = this;
+        let busy = false;
+        let index = 0;
         const processor = setInterval(function () {
             if (!busy && !self.paused) {
                 busy = true;
-                InsertionSort.run(self.array, index, Configuration.CHUNK_SIZE, onProgress);
+                self.algorithm.run(self.array, index, Configuration.CHUNK_SIZE, onProgress);
                 index += Configuration.CHUNK_SIZE;
 
                 if (index >= self.array.length) {
                     clearInterval(processor);
-                    if(onFinished) onFinished(self.array);
+                    if(onDone) onDone(self.array);
                 }
                 busy = false;
             }
