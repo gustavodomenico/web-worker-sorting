@@ -49,7 +49,7 @@ it('shows the workers table with clicking functionality', () => {
     wrapper.find(Button).at(2).simulate('click');
     wrapper.find(Button).at(3).simulate('click');
 
-    // The click simulation will not hornor the disabled attribute
+    // The click simulation will not honor the disabled attribute
     // ref: https://github.com/airbnb/enzyme/issues/386
     expect(callback).toHaveBeenCalledTimes(4);
 });

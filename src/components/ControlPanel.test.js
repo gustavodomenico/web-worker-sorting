@@ -1,7 +1,7 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import ControlPanel from "./ControlPanel";
-import {Button, Card, FormCheck, FormControl} from "react-bootstrap";
+import {Button, FormCheck, FormControl} from "react-bootstrap";
 
 it('shows initial values', () => {
     const wrapper = shallow(

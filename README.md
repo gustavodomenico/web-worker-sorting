@@ -16,7 +16,6 @@ Enzyne and disabled buttons
 
 Missing
 
-stateless compoenents react
 browser support for workers
 
 method guards asserts
@@ -24,6 +23,12 @@ error handling
 
 check ; consistency
 revisit unit tests (exceptional cases)
+colocar beforeAll com os mocks e variáveis globais
+check "" and '' nos testes e etc
+add snapshopts?
+
+stateless compoenents react
+
 
 added typescript to avoid warnings
 https://github.com/facebook/create-react-app/issues/6834

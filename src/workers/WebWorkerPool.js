@@ -1,8 +1,6 @@
 import Messages from "../common/Messages";
 import Configuration from "../common/Configuration";
-
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
+import WebWorker from "../workers/WebWorker.worker.js";
 
 export default class WebWorkerPool {
     constructor() {
