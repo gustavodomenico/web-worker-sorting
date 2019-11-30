@@ -10,6 +10,7 @@ import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
 import IsArraySorted from "../algorithms/IsArraySorted";
 import SplitArray from "../algorithms/SplitArray";
+import CombineSortedArrays from "../algorithms/CombineSortedArrays";
 
 const webWorkerPool = new WebWorkerPool();
 
@@ -84,34 +85,14 @@ function App() {
     const handleCombinedResultsButtonClick = (w) => {
         setShowResults(true);
 
-        function mergeSortedArray(a, b) {
-            var sorted = [], indexA = 0, indexB = 0;
-
-            while (indexA < a.length && indexB < b.length) {
-                if (a[indexA] - b[indexB] > 0) {
-                    sorted.push(b[indexB++]);
-                } else {
-                    sorted.push(a[indexA++]);
-                }
-            }
-
-            if (indexB < b.length) {
-                sorted = sorted.concat(b.slice(indexB));
-            } else {
-                sorted = sorted.concat(a.slice(indexA));
-            }
-
-            return sorted;
-        }
-
-        let combinedArray = w.reduce((a, b) => mergeSortedArray(a, b.sortedArray), []);
+        let combinedArray = CombineSortedArrays.run(w.map(e => e.sortedArray));
         if (!IsArraySorted.run(combinedArray))
             throw new Error("Array is not sorted after the worker operation.");
+        setSortedArray(combinedArray);
 
         let combineOriginalArray = w.reduce((a, b) => a.concat(b.originalArray), []);
-
-        setSortedArray(combinedArray);
         setOriginalArray(combineOriginalArray);
+
         setMessagesTimes([]);
     };
 

@@ -9,6 +9,7 @@ const ResultModal = props =>
             <Modal.Title>Sorting Results</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+            {props.messagesTimes.length > 0 &&
             <Card bg="light">
                 <Card.Body>
                     <Card.Title>Messages times</Card.Title>
@@ -17,7 +18,8 @@ const ResultModal = props =>
                     </Card.Text>
                 </Card.Body>
             </Card>
-            <br />
+            }
+            <br/>
             <Card bg="light">
                 <Card.Body>
                     <Card.Title>Original Array Sample</Card.Title>
@@ -41,7 +43,9 @@ const ResultModal = props =>
             </Card>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" onClick={props.onHide}>Close</Button>
+            <Button
+                variant="secondary"
+                onClick={props.onHide}> Close </Button>
         </Modal.Footer>
     </Modal>;
 

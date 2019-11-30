@@ -21,3 +21,4 @@ check ; consistency
 verificar os let x const
 add tooltips to the buttons
 remove () from the lamdas
+revisit unit tests (exceptional cases)
