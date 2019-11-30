@@ -15,15 +15,15 @@ function messageHandler(context) {
             postMessage({message: Messages.DONE, value: array});
         };
 
-        const onNewNumberAdded = (array) => {
-            postMessage({message: Messages.UPDATED, value: array.length});
+        const onNewNumberAdded = (array, timestamp) => {
+            postMessage({message: Messages.UPDATED, value: array.length, timestamp: timestamp});
         };
 
         const messageCallbacks = new Map([
             [Messages.START, (data) => context.run(data.array, onProgress, onFinished)],
             [Messages.PAUSE, () => context.pause()],
             [Messages.RESUME, () => context.resume()],
-            [Messages.ADD_NUMBER, (data) => context.add(data.value, onNewNumberAdded)]
+            [Messages.ADD_NUMBER, (data) => context.add(data, onNewNumberAdded)]
         ]);
 
         messageCallbacks.get(e.data.message)(e.data);

@@ -35,6 +35,7 @@ export default class WebWorkerPool {
             let clock = setInterval(function () {
                 w.postMessage({
                     message: Messages.ADD_NUMBER,
+                    timestamp: Date.now(),
                     value: Math.floor((Math.random() * Configuration.ARRAY_SIZE))
                 });
             }, newNumberInterval);

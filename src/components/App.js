@@ -29,10 +29,16 @@ function App() {
         };
         const onWorkerProgress = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
-                {...el, status: 'Working...', progress: m.data.value} : el));};
+                {...el, status: 'Working', progress: m.data.value} : el));
+        };
 
         const onWorkerUpdated = (id, m) => {
-            setWorkers(prev => prev.map(el => el.id === id ? {...el, size: m.data.value} : el));};
+            const lastMessageTime = Date.now() - (m.data.timestamp);
+            setWorkers(prev =>
+                prev.map(el => el.id === id ?
+                    {...el, size: m.data.value, messageTimes: [...el.messageTimes, lastMessageTime]} :
+                    el));
+        };
 
         webWorkerPool.start(workersCount, array, interval,
             onWorkerFinished, onWorkerProgress, onWorkerUpdated);
@@ -49,7 +55,8 @@ function App() {
 
     const handlePauseButtonClick = (w) => {
         webWorkerPool.pause(w);
-        setWorkers(prev => prev.map(el => el.id === w ? {...el, status: "Paused", isPaused: true} : el));};
+        setWorkers(prev => prev.map(el => el.id === w ? {...el, status: "Paused", isPaused: true} : el));
+    };
 
     const handleResumeButtonClick = (w) => {
         webWorkerPool.resume(w);
@@ -92,7 +99,7 @@ function App() {
                 </Col>
                 <Col/>
             </Row>
-            <ResultModal originalArray={originalArray}  sortedArray={sortedArray}  show={showResults}
+            <ResultModal originalArray={originalArray} sortedArray={sortedArray} show={showResults}
                          onHide={() => setShowResults(false)}
             />
         </Container>

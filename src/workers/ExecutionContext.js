@@ -37,8 +37,8 @@ export default class ExecutionContext {
         this.paused = false;
     }
 
-    add(number, onNewNumberAdded) {
-        this.array.push(number);
-        onNewNumberAdded(this.array);
+    add(data, onNewNumberAdded) {
+        this.array.push(data.value);
+        onNewNumberAdded(this.array, data.timestamp);
     }
 }
