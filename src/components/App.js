@@ -119,6 +119,7 @@ function App() {
                             {started &&
                             <WorkersTable
                                 workers={workers}
+                                splitArray={splitArray}
                                 onPauseButtonClick={(w) => handlePauseButtonClick(w)}
                                 onResumeButtonClick={(w) => handleResumeButtonClick(w)}
                                 onResultsButtonClick={(w) => handleResultsButtonClick(w)}

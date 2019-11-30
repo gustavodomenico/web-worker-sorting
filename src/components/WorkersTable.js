@@ -63,7 +63,7 @@ const WorkersTable = props => {
                 </tbody>
             </Table>
             <Button variant={"secondary"} className={"pull-right"}
-                    disabled={!props.workers.every(w => w.isFinished) ? "disabled" : ""}
+                    disabled={!props.workers.every(w => w.isFinished) || !props.splitArray ? "disabled" : ""}
                     onClick={() => props.onCombinedResultsButtonClick(props.workers)}>Combined Results</Button>
         </div>
     )
