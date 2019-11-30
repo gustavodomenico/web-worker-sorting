@@ -10,18 +10,27 @@ const ResultModal = props =>
         <Modal.Body>
             <Card bg="light">
                 <Card.Body>
-                    <Card.Title>Original</Card.Title>
+                    <Card.Title>Messages times</Card.Title>
                     <Card.Text>
-                        {props.originalArray.slice(0, 100).join(" ")}
+                        {props.messagesTimes.join(" ms, ")} ms
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+            <br />
+            <Card bg="light">
+                <Card.Body>
+                    <Card.Title>Original Array</Card.Title>
+                    <Card.Text>
+                        {props.originalArray.slice(0, 100).join(", ")}
                     </Card.Text>
                 </Card.Body>
             </Card>
             <br/>
             <Card bg="light">
                 <Card.Body>
-                    <Card.Title>Sorted</Card.Title>
+                    <Card.Title>Sorted Array</Card.Title>
                     <Card.Text>
-                        {props.sortedArray.slice(0, 100).join(" ")}
+                        {props.sortedArray.slice(0, 100).join(", ")}
                     </Card.Text>
                 </Card.Body>
             </Card>

@@ -1,5 +1,7 @@
 import React from "react";
 import {Button, ButtonToolbar, ProgressBar, Table} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPause, faPlay, faPoll} from '@fortawesome/free-solid-svg-icons'
 
 const WorkersTable = props => {
     const getExecutionTime = (worker) => {
@@ -10,10 +12,10 @@ const WorkersTable = props => {
         return "";
     };
     const getAverageMessagesTime = (worker) => {
-        if (worker.messageTimes.length === 0) return 0;
+        if (worker.messagesTimes.length === 0) return 0;
 
-        const sum = worker.messageTimes.reduce((a, b) => a + b);
-        return sum / worker.messageTimes.length;
+        const sum = worker.messagesTimes.reduce((a, b) => a + b);
+        return sum / worker.messagesTimes.length;
     };
     return (
         <Table bordered size="sm">
@@ -32,30 +34,31 @@ const WorkersTable = props => {
                 return (<tr key={worker.id}>
                     <td>{worker.id}</td>
                     <td width={120}>{worker.status}</td>
-                    <td width={150}>{worker.messageTimes.length} / {getAverageMessagesTime(worker).toFixed(3)} ms</td>
+                    <td width={150}>{worker.messagesTimes.length} / {getAverageMessagesTime(worker).toFixed(3)} ms</td>
                     <td width={150}>{getExecutionTime(worker)}</td>
                     <td>
                         <ProgressBar max={worker.size} now={worker.progress} label={`${worker.progress} items`}/>
                     </td>
-                    <td width={280}>
+                    <td width={150}>
                         <ButtonToolbar>
                             <Button variant={"info"} size={"sm"}
                                     disabled={worker.isFinished || worker.isPaused ? "disabled" : ""}
                                     onClick={() => props.onPauseButtonClick(worker.id)}>
-                                <i className="fa fa-pencil"></i> Pause</Button>
+                                <FontAwesomeIcon icon={faPause}/></Button>
 
                             <Button variant={"info"} size={"sm"}
                                     disabled={worker.isFinished || !worker.isPaused ? "disabled" : ""}
-                                    onClick={() => props.onResumeButtonClick(worker.id)}>Resume</Button>
+                                    onClick={() => props.onResumeButtonClick(worker.id)}>
+                                <FontAwesomeIcon icon={faPlay}/></Button>
 
                             <Button variant={"success"} size={"sm"}
                                     disabled={!worker.isFinished ? "disabled" : ""}
-                                    onClick={() => props.onResultsButtonClick(worker.id)}>Results</Button>
+                                    onClick={() => props.onResultsButtonClick(worker.id)}>
+                                <FontAwesomeIcon icon={faPoll}/></Button>
                         </ButtonToolbar>
                     </td>
                 </tr>);
-            })
-            }
+            })}
             </tbody>
         </Table>)
 };

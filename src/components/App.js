@@ -19,6 +19,7 @@ function App() {
     const [workersCount, setWorkersCount] = useState(2);
     const [originalArray, setOriginalArray] = useState([]);
     const [sortedArray, setSortedArray] = useState([]);
+    const [messagesTimes, setMessagesTimes] = useState([]);
 
     const handleStartButtonClick = () => {
         const array = Configuration.createArray();
@@ -36,7 +37,7 @@ function App() {
             const lastMessageTime = Date.now() - (m.data.timestamp);
             setWorkers(prev =>
                 prev.map(el => el.id === id ?
-                    {...el, size: m.data.value, messageTimes: [...el.messageTimes, lastMessageTime]} :
+                    {...el, size: m.data.value, messagesTimes: [...el.messagesTimes, lastMessageTime]} :
                     el));
         };
 
@@ -66,6 +67,7 @@ function App() {
     const handleResultsButtonClick = (w) => {
         setShowResults(true);
         setSortedArray(workers[w].sortedArray);
+        setMessagesTimes(workers[w].messagesTimes);
     };
 
     return (
@@ -99,8 +101,8 @@ function App() {
                 </Col>
                 <Col/>
             </Row>
-            <ResultModal originalArray={originalArray} sortedArray={sortedArray} show={showResults}
-                         onHide={() => setShowResults(false)}
+            <ResultModal originalArray={originalArray} sortedArray={sortedArray}  messagesTimes={messagesTimes}
+                         show={showResults} onHide={() => setShowResults(false)}
             />
         </Container>
     );

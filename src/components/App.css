@@ -22,6 +22,10 @@ button {
   min-width: 80px;
 }
 
+button.btn-sm {
+  min-width: 40px;
+}
+
 .progress {
   height: 25px;
   min-width: 100px;
