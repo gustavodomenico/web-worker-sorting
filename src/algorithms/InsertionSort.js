@@ -1,5 +1,5 @@
 export default class InsertionSort {
-    static sortChunk(array, startIndex, chunk, onProgress) {
+    static run(array, startIndex, chunk, onProgress) {
         let length = startIndex + chunk > array.length ?
             array.length :
             startIndex + chunk;
@@ -18,8 +18,4 @@ export default class InsertionSort {
 
         return array;
     };
-
-    static sortFromIndex = (array, startIndex, onProgress) => this.sortChunk(array, startIndex, array.length, onProgress);
-
-    static sort = (array, onProgress) => this.sortFromIndex(array, 0, onProgress);
 };

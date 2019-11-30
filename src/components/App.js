@@ -8,21 +8,10 @@ import ResultModal from "./ResultModal";
 
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
-import IsArraySorted from "../algorithm/IsArraySorted";
+import IsArraySorted from "../algorithms/IsArraySorted";
+import SplitArray from "../algorithms/SplitArray";
 
 const webWorkerPool = new WebWorkerPool();
-
-function splitArrayT(array = [], nPieces = 1) {
-    const splitArray = [];
-    let atArrPos = 0;
-    for (let i = 0; i < nPieces; i++) {
-        const splitArrayLength = Math.ceil((array.length - atArrPos) / (nPieces - i));
-        splitArray.push([]);
-        splitArray[i] = array.slice(atArrPos, splitArrayLength + atArrPos);
-        atArrPos += splitArrayLength;
-    }
-    return splitArray
-}
 
 function App() {
     const [workers, setWorkers] = useState([]);
@@ -40,7 +29,7 @@ function App() {
 
         const workers = Configuration.createWorkers(workersCount, array);
         if (splitArray) {
-            const arrays = splitArrayT(array, workersCount);
+            const arrays = SplitArray.run(array, workersCount);
             workers.forEach((el, index) => el.originalArray = arrays[index]);
         }
 
@@ -48,7 +37,7 @@ function App() {
             setWorkers(prev => prev.map(el => el.id === id ?
                 {...el, status: 'Done', isFinished: true, sortedArray: m.data.value, endTime: Date.now()} : el));
 
-            if (!IsArraySorted.check(sortedArray))
+            if (!IsArraySorted.run(sortedArray))
                 throw new Error("Array is not sorted after the worker operation.");
         };
         const onWorkerProgress = (id, m) => {
@@ -116,7 +105,7 @@ function App() {
         }
 
         let combinedArray = w.reduce((a, b) => mergeSortedArray(a, b.sortedArray), []);
-        if (!IsArraySorted.check(combinedArray))
+        if (!IsArraySorted.run(combinedArray))
             throw new Error("Array is not sorted after the worker operation.");
 
         let combineOriginalArray = w.reduce((a, b) => a.concat(b.originalArray), []);

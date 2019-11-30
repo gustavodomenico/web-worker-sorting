@@ -34,3 +34,7 @@ button.btn-sm {
 .pull-right {
   float: right;
 }
+
+.form-check {
+  margin-top: 5px;
+}

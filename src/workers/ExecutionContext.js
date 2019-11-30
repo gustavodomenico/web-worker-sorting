@@ -1,4 +1,4 @@
-import InsertionSort from "../algorithm/InsertionSort";
+import InsertionSort from "../algorithms/InsertionSort";
 import Configuration from "../common/Configuration";
 
 export default class ExecutionContext {
@@ -17,7 +17,7 @@ export default class ExecutionContext {
         const processor = setInterval(function () {
             if (!busy && !self.paused) {
                 busy = true;
-                InsertionSort.sortChunk(self.array, index, Configuration.CHUNK_SIZE, onProgress);
+                InsertionSort.run(self.array, index, Configuration.CHUNK_SIZE, onProgress);
                 index += Configuration.CHUNK_SIZE;
 
                 if (index >= self.array.length) {
