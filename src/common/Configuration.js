@@ -1,9 +1,9 @@
 export default class Configuration {
-    static ARRAY_SIZE = 5000;
+    static ARRAY_SIZE = 1000;
     static CHUNK_SIZE = 5000;
     static POLLING_INTERVAL = 500;
 
-    static createWorkers(workersCount) {
+    static createWorkers(workersCount, array) {
         return [...Array(workersCount).keys()].map((n) => ({
             id: n,
             isPaused: false,
@@ -13,7 +13,9 @@ export default class Configuration {
             size: Configuration.ARRAY_SIZE,
             startTime: Date.now(),
             endTime: null,
-            messagesTimes: []
+            messagesTimes: [],
+            originalArray: array,
+            sortedArray: []
         }));
     }
 

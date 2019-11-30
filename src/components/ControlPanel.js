@@ -14,11 +14,17 @@ const ControlPanel = props =>
         </Form.Group>
         <Form.Group as={Row}>
             <Form.Label column sm={3}>Number of workers:</Form.Label>
-            <Col sm={9}>
+            <Col sm={4}>
                 <Form.Control type="number" placeholder="Number of workers"
                               defaultValue={props.workersCount}
                               disabled={props.hasStarted ? "disabled" : ""}
                               onChange={(text) => props.onWorkersCountChange(text)}/>
+            </Col>
+            <Col sm={5}>
+                <Form.Check checked={props.splitArray}
+                            onChange={props.onSplitArrayChange}
+                            disabled={props.hasStarted ? "disabled" : ""}
+                            type="checkbox" label="Split the array between the workers"  />
             </Col>
         </Form.Group>
         <Button variant="primary"

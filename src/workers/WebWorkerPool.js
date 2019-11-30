@@ -6,16 +6,16 @@ import WebWorker from "worker-loader!../workers/WebWorker.worker.js";
 
 export default class WebWorkerPool {
     constructor() {
-        this.workers = [];
+        this.webWorkers = [];
         this.clocks = [];
     }
 
-    start(workersCount, array, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerUpdated) {
+    start(workers, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerUpdated) {
         const self = this;
 
-        this.workers = [...Array(workersCount).keys()].map((n) => {
+        this.webWorkers = workers.map((worker) => {
             const w = WebWorker();
-            w.postMessage({message: Messages.START, array: array});
+            w.postMessage({message: Messages.START, array: worker.originalArray});
 
             const messageCallbacks = new Map([
                 [Messages.DONE, (n, m) => {
@@ -29,7 +29,7 @@ export default class WebWorkerPool {
 
             w.onmessage = (m) => {
                 if (messageCallbacks.has(m.data.message))
-                    messageCallbacks.get(m.data.message)(n, m);
+                    messageCallbacks.get(m.data.message)(worker.id, m);
             };
 
             let clock = setInterval(function () {
@@ -48,14 +48,14 @@ export default class WebWorkerPool {
 
     stop() {
         this.clocks.forEach((c) => clearInterval(c));
-        this.workers.forEach((w) => w.terminate());
+        this.webWorkers.forEach((w) => w.terminate());
     }
 
     pause(id) {
-        this.workers[id].postMessage({message: Messages.PAUSE});
+        this.webWorkers[id].postMessage({message: Messages.PAUSE});
     }
 
     resume(id) {
-        this.workers[id].postMessage({message: Messages.RESUME});
+        this.webWorkers[id].postMessage({message: Messages.RESUME});
     }
 }

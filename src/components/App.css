@@ -30,3 +30,7 @@ button.btn-sm {
   height: 25px;
   min-width: 100px;
 }
+
+.pull-right {
+  float: right;
+}
