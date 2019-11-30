@@ -34,7 +34,7 @@ const WorkersTable = props => {
                 return (<tr key={worker.id}>
                     <td>{worker.id}</td>
                     <td width={120}>{worker.status}</td>
-                    <td width={150}>{worker.messagesTimes.length} / {getAverageMessagesTime(worker).toFixed(3)} ms</td>
+                    <td width={150}>{worker.messagesTimes.length} / {getAverageMessagesTime(worker).toFixed(3)} avg(ms)</td>
                     <td width={150}>{getExecutionTime(worker)}</td>
                     <td>
                         <ProgressBar max={worker.size} now={worker.progress} label={`${worker.progress} items`}/>

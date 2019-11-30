@@ -19,3 +19,4 @@ error handling
 stateless compoenents react
 check ; consistency
 verificar os let x const
+add tooltips to the buttons

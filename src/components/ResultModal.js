@@ -1,6 +1,7 @@
 import React from "react";
 import {Modal, Button} from "react-bootstrap";
 import {Card} from 'react-bootstrap';
+import {CSVLink} from "react-csv";
 
 const ResultModal = props =>
     <Modal size={"xl"} show={props.show} onHide={props.onHide}>
@@ -19,18 +20,22 @@ const ResultModal = props =>
             <br />
             <Card bg="light">
                 <Card.Body>
-                    <Card.Title>Original Array</Card.Title>
+                    <Card.Title>Original Array Sample</Card.Title>
                     <Card.Text>
-                        {props.originalArray.slice(0, 100).join(", ")}
+                        {props.originalArray.slice(0, 50).join(", ")}
+                        <br/><br/>
+                        <CSVLink data={props.originalArray.toString()}>Download full array</CSVLink>
                     </Card.Text>
                 </Card.Body>
             </Card>
             <br/>
             <Card bg="light">
                 <Card.Body>
-                    <Card.Title>Sorted Array</Card.Title>
+                    <Card.Title>Sorted Array Sample</Card.Title>
                     <Card.Text>
-                        {props.sortedArray.slice(0, 100).join(", ")}
+                        {props.sortedArray.slice(0, 50).join(", ")}
+                        <br/><br/>
+                        <CSVLink data={props.sortedArray.toString()}>Download full array</CSVLink>
                     </Card.Text>
                 </Card.Body>
             </Card>
