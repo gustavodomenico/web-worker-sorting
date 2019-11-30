@@ -7,7 +7,9 @@ export default class Configuration {
 
     static createWorkers(workersCount, splitArray) {
         const array = this.createArray();
-        const arrays = splitArray ? SplitArray.run(array, workersCount) : [];
+        const arrays = splitArray ?
+            (new SplitArray()).run(array, workersCount) :
+            [];
 
         return [...Array(workersCount).keys()].map(n => ({
             id: n,

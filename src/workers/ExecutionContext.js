@@ -5,7 +5,7 @@ export default class ExecutionContext {
     constructor() {
         this.paused = false;
         this.array = [];
-        this.algorithm = new InsertionSort();
+        this.sorter = new InsertionSort();
     }
 
     run(array, onProgress, onDone) {
@@ -20,7 +20,7 @@ export default class ExecutionContext {
         const processor = setInterval(function () {
             if (!busy && !self.paused) {
                 busy = true;
-                self.algorithm.run(self.array, index, Configuration.CHUNK_SIZE, onProgress);
+                self.sorter.run(self.array, index, Configuration.CHUNK_SIZE, onProgress);
                 index += Configuration.CHUNK_SIZE;
 
                 if (index >= self.array.length) {

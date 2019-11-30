@@ -14,12 +14,6 @@ https://stackoverflow.com/questions/42567535/resolving-imports-using-webpacks-wo
 https://github.com/airbnb/enzyme/issues/386
 Enzyne and disabled buttons 
 
-Missing
-
-
-add snapshopts?
-review scenarios describe?
-
 
 
 

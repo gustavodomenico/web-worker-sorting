@@ -14,10 +14,11 @@ describe("context execution", () => {
     });
 
     const executionContext = new ExecutionContext();
-    const array = Configuration.createArray();
-    const handleProgress = jest.fn(), handleDone = jest.fn();
 
     it("calls the callbacks", () => {
+        const array = Configuration.createArray();
+        const handleProgress = jest.fn(), handleDone = jest.fn();
+
         executionContext.run(array, handleProgress, handleDone);
 
         expect(setInterval).toHaveBeenCalled();
@@ -26,6 +27,25 @@ describe("context execution", () => {
 
         expect(InsertionSort).toHaveBeenCalled();
         expect(handleDone).toHaveBeenCalled();
+        expect(clearInterval).toHaveBeenCalled();
+    });
+
+    it("pauses the execution", () => {
+        executionContext.pause();
+        expect(executionContext.paused).toBeTruthy();
+    });
+
+    it("resumes the execution", () => {
+        executionContext.resume();
+        expect(executionContext.paused).toBeFalsy();
+    });
+
+    it("adds new number to array", () => {
+        const handleNewNumberAdded = jest.fn();
+        executionContext.add({value: 100}, handleNewNumberAdded);
+
+        expect(executionContext.array[executionContext.array.length - 1]).toEqual(100);
+        expect(handleNewNumberAdded).toHaveBeenCalled();
     });
 });
 

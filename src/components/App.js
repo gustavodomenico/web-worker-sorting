@@ -12,6 +12,8 @@ import IsArraySorted from "../algorithms/IsArraySorted";
 import CombineSortedArrays from "../algorithms/CombineSortedArrays";
 
 const webWorkerPool = new WebWorkerPool();
+const isArraySorted = new IsArraySorted();
+const combineSortedArrays = new CombineSortedArrays();
 
 function App() {
     const [workers, setWorkers] = useState([]);
@@ -31,7 +33,7 @@ function App() {
             setWorkers(prev => prev.map(el => el.id === id ?
                 {...el, status: "Done", isFinished: true, sortedArray: m.data.value, endTime: Date.now()} : el));
 
-            if (!IsArraySorted.run(sortedArray))
+            if (!isArraySorted.run(sortedArray))
                 throw new Error("Array is not sorted after the worker operation.");
         };
         const handleWorkerProgress = (id, m) => {
@@ -78,8 +80,8 @@ function App() {
     const handleCombinedResultsButtonClick = workers => {
         setShowResults(true);
 
-        const combinedArray = CombineSortedArrays.run(workers.map(e => e.sortedArray));
-        if (!IsArraySorted.run(combinedArray))
+        const combinedArray = combineSortedArrays.run(workers.map(e => e.sortedArray));
+        if (!isArraySorted.run(combinedArray))
             throw new Error("Array is not sorted after the workers operation.");
         setSortedArray(combinedArray);
 

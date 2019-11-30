@@ -1,5 +1,5 @@
 export default class CombineSortedArrays {
-    static combine(a, b) {
+    combine(a, b) {
         let sorted = [], indexA = 0, indexB = 0;
         while (indexA < a.length && indexB < b.length) {
             if (a[indexA] - b[indexB] > 0) {
@@ -17,7 +17,7 @@ export default class CombineSortedArrays {
         return sorted;
     }
 
-    static run(arrays) {
+    run(arrays) {
         return arrays.reduce((a, b) => this.combine(a, b), []);
     }
 };

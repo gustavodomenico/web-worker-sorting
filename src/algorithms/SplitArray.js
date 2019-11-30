@@ -1,5 +1,5 @@
 export default class SplitArray {
-    static run(array = [], n = 1) {
+     run(array = [], n = 1) {
         const splitArray = [];
         let atArrPos = 0;
         for (let i = 0; i < n; i++) {
