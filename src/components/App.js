@@ -8,6 +8,7 @@ import ResultModal from "./ResultModal";
 
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
+import IsArraySorted from "../algorithm/IsArraySorted";
 
 const webWorkerPool = new WebWorkerPool();
 
@@ -27,6 +28,9 @@ function App() {
         const onWorkerFinished = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
                 {...el, status: 'Done', isFinished: true, sortedArray: m.data.value, endTime: Date.now()} : el));
+
+            if (!IsArraySorted.check(sortedArray))
+                throw new Error("Array is not sorted after the worker operation.");
         };
         const onWorkerProgress = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
