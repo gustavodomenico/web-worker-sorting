@@ -13,7 +13,7 @@ export default class WebWorkerPool {
     start(workers, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerUpdated) {
         const self = this;
 
-        this.webWorkers = workers.map((worker) => {
+        this.webWorkers = workers.map(worker => {
             const w = WebWorker();
             w.postMessage({message: Messages.START, array: worker.originalArray});
 
@@ -27,7 +27,7 @@ export default class WebWorkerPool {
                 [Messages.UPDATED, (n, m) => onWorkerUpdated(n, m)]
             ]);
 
-            w.onmessage = (m) => {
+            w.onmessage = m => {
                 if (messageCallbacks.has(m.data.message))
                     messageCallbacks.get(m.data.message)(worker.id, m);
             };
@@ -47,8 +47,8 @@ export default class WebWorkerPool {
     }
 
     stop() {
-        this.clocks.forEach((c) => clearInterval(c));
-        this.webWorkers.forEach((w) => w.terminate());
+        this.clocks.forEach(c => clearInterval(c));
+        this.webWorkers.forEach(w => w.terminate());
     }
 
     pause(id) {

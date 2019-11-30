@@ -1,10 +1,15 @@
+import SplitArray from "../algorithms/SplitArray";
+
 export default class Configuration {
     static ARRAY_SIZE = 1000;
     static CHUNK_SIZE = 5000;
     static POLLING_INTERVAL = 500;
 
-    static createWorkers(workersCount, array) {
-        return [...Array(workersCount).keys()].map((n) => ({
+    static createWorkers(workersCount, splitArray) {
+        const array = this.createArray();
+        const arrays = splitArray ? SplitArray.run(array, workersCount) : [];
+
+        return [...Array(workersCount).keys()].map(n => ({
             id: n,
             isPaused: false,
             isFinished: false,
@@ -14,7 +19,7 @@ export default class Configuration {
             startTime: Date.now(),
             endTime: null,
             messagesTimes: [],
-            originalArray: array,
+            originalArray: splitArray ? arrays[n] : array,
             sortedArray: []
         }));
     }

@@ -4,14 +4,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPause, faPlay, faPoll} from '@fortawesome/free-solid-svg-icons'
 
 const WorkersTable = props => {
-    const getExecutionTime = (worker) => {
+    const getExecutionTime = worker => {
         if (worker.isFinished) {
             const dif = worker.endTime - worker.startTime;
             return (dif / 1000) + " secs";
         }
         return "";
     };
-    const getAverageMessagesTime = (worker) => {
+    const getAverageMessagesTime = worker => {
         if (worker.messagesTimes.length === 0) return 0;
 
         const sum = worker.messagesTimes.reduce((a, b) => a + b);

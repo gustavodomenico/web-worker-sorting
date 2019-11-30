@@ -9,7 +9,6 @@ import ResultModal from "./ResultModal";
 import Configuration from "../common/Configuration";
 import WebWorkerPool from "../workers/WebWorkerPool";
 import IsArraySorted from "../algorithms/IsArraySorted";
-import SplitArray from "../algorithms/SplitArray";
 import CombineSortedArrays from "../algorithms/CombineSortedArrays";
 
 const webWorkerPool = new WebWorkerPool();
@@ -26,13 +25,7 @@ function App() {
     const [splitArray, setSplitArray] = useState(false);
 
     const handleStartButtonClick = () => {
-        const array = Configuration.createArray();
-
-        const workers = Configuration.createWorkers(workersCount, array);
-        if (splitArray) {
-            const arrays = SplitArray.run(array, workersCount);
-            workers.forEach((el, index) => el.originalArray = arrays[index]);
-        }
+        const workers = Configuration.createWorkers(workersCount, splitArray);
 
         const onWorkerFinished = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
@@ -65,32 +58,32 @@ function App() {
         setStarted(false);
     };
 
-    const handlePauseButtonClick = (w) => {
-        webWorkerPool.pause(w);
-        setWorkers(prev => prev.map(el => el.id === w ? {...el, status: "Paused", isPaused: true} : el));
+    const handlePauseButtonClick = id => {
+        webWorkerPool.pause(id);
+        setWorkers(prev => prev.map(el => el.id === id ? {...el, status: "Paused", isPaused: true} : el));
     };
 
-    const handleResumeButtonClick = (w) => {
-        webWorkerPool.resume(w);
-        setWorkers(prev => prev.map(el => el.id === w ? {...el, isPaused: false} : el));
+    const handleResumeButtonClick = id => {
+        webWorkerPool.resume(id);
+        setWorkers(prev => prev.map(el => el.id === id ? {...el, isPaused: false} : el));
     };
 
-    const handleResultsButtonClick = (w) => {
+    const handleResultsButtonClick = id => {
         setShowResults(true);
-        setOriginalArray(workers[w].originalArray);
-        setSortedArray(workers[w].sortedArray);
-        setMessagesTimes(workers[w].messagesTimes);
+        setOriginalArray(workers[id].originalArray);
+        setSortedArray(workers[id].sortedArray);
+        setMessagesTimes(workers[id].messagesTimes);
     };
 
-    const handleCombinedResultsButtonClick = (w) => {
+    const handleCombinedResultsButtonClick = workers => {
         setShowResults(true);
 
-        let combinedArray = CombineSortedArrays.run(w.map(e => e.sortedArray));
+        let combinedArray = CombineSortedArrays.run(workers.map(e => e.sortedArray));
         if (!IsArraySorted.run(combinedArray))
-            throw new Error("Array is not sorted after the worker operation.");
+            throw new Error("Array is not sorted after the workers operation.");
         setSortedArray(combinedArray);
 
-        let combineOriginalArray = w.reduce((a, b) => a.concat(b.originalArray), []);
+        let combineOriginalArray = workers.reduce((a, b) => a.concat(b.originalArray), []);
         setOriginalArray(combineOriginalArray);
 
         setMessagesTimes([]);
@@ -107,9 +100,9 @@ function App() {
                             <ControlPanel
                                 onStartButtonClick={() => handleStartButtonClick()}
                                 onStopButtonClick={() => handleStopButtonClick()}
-                                onIntervalChange={(e) => setInterval(e.target.value)}
-                                onWorkersCountChange={(e) => setWorkersCount(e.target.value ? parseInt(e.target.value) : 1)}
-                                onSplitArrayChange={(e) => setSplitArray(prev => !prev)}
+                                onIntervalChange={e => setInterval(e.target.value)}
+                                onWorkersCountChange={e => setWorkersCount(e.target.value ? parseInt(e.target.value) : 1)}
+                                onSplitArrayChange={() => setSplitArray(prev => !prev)}
                                 hasStarted={started}
                                 newNumberInterval={interval}
                                 workersCount={workersCount}
@@ -120,10 +113,10 @@ function App() {
                             <WorkersTable
                                 workers={workers}
                                 splitArray={splitArray}
-                                onPauseButtonClick={(w) => handlePauseButtonClick(w)}
-                                onResumeButtonClick={(w) => handleResumeButtonClick(w)}
-                                onResultsButtonClick={(w) => handleResultsButtonClick(w)}
-                                onCombinedResultsButtonClick={(w) => handleCombinedResultsButtonClick(w)}
+                                onPauseButtonClick={id => handlePauseButtonClick(id)}
+                                onResumeButtonClick={id => handleResumeButtonClick(id)}
+                                onResultsButtonClick={id => handleResultsButtonClick(id)}
+                                onCombinedResultsButtonClick={workers => handleCombinedResultsButtonClick(workers)}
                             />
                             }
                         </Card.Body>

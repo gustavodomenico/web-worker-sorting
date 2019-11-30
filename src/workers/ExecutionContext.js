@@ -38,6 +38,8 @@ export default class ExecutionContext {
     }
 
     add(data, onNewNumberAdded) {
+        // Given the nature of the single thread execution of the worker, we don't need to pause it
+        // if the message is being processed is because the sorting is not running
         this.array.push(data.value);
         onNewNumberAdded(this.array, data.timestamp);
     }

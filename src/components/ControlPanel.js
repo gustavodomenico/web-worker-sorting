@@ -9,7 +9,7 @@ const ControlPanel = props =>
                 <Form.Control type="number" placeholder="New number interval (ms)"
                               defaultValue={props.newNumberInterval}
                               disabled={props.hasStarted ? "disabled" : ""}
-                              onChange={(text) => props.onIntervalChange(text)}/>
+                              onChange={e => props.onIntervalChange(e)}/>
             </Col>
         </Form.Group>
         <Form.Group as={Row}>
@@ -18,7 +18,7 @@ const ControlPanel = props =>
                 <Form.Control type="number" placeholder="Number of workers"
                               defaultValue={props.workersCount}
                               disabled={props.hasStarted ? "disabled" : ""}
-                              onChange={(text) => props.onWorkersCountChange(text)}/>
+                              onChange={e => props.onWorkersCountChange(e)}/>
             </Col>
             <Col sm={5}>
                 <Form.Check checked={props.splitArray}
