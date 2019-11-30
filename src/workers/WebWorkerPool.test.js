@@ -5,11 +5,11 @@ import Messages from "../common/Messages";
 describe("worker pool management", () => {
     beforeAll(() => {
         jest.useFakeTimers()
-    })
+    });
 
     afterAll(() => {
         jest.useRealTimers()
-    })
+    });
 
     const webWorkerPool = new WebWorkerPool();
     const numberOfWorkers = 2;
