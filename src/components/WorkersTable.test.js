@@ -4,7 +4,7 @@ import WorkersTable from "./WorkersTable";
 import Configuration from "../common/Configuration";
 import {Button, ProgressBar} from "react-bootstrap";
 
-it('shows the workers table', () => {
+it('shows the workers table with clicking functionality', () => {
     const timestamp = Date.now();
     const callback = jest.fn();
 
