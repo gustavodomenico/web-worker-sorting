@@ -1,5 +1,5 @@
 export default class Configuration {
-    static ARRAY_SIZE = 10000;
+    static ARRAY_SIZE = 100000;
     static CHUNK_SIZE = 5000;
     static POLLING_INTERVAL = 500;
 
@@ -10,7 +10,9 @@ export default class Configuration {
             isFinished: false,
             progress: 0,
             status: "Working",
-            size: Configuration.ARRAY_SIZE
+            size: Configuration.ARRAY_SIZE,
+            startTime: Date.now(),
+            endTime: null
         }));
     }
 

@@ -25,7 +25,7 @@ function App() {
 
         const onWorkerFinished = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
-                {...el, status: 'Done', isFinished: true, sortedArray: m.data.value} : el));
+                {...el, status: 'Done', isFinished: true, sortedArray: m.data.value, endTime: Date.now()} : el));
         };
         const onWorkerProgress = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
@@ -92,9 +92,7 @@ function App() {
                 </Col>
                 <Col/>
             </Row>
-            <ResultModal originalArray={originalArray}
-                         sortedArray={sortedArray}
-                         show={showResults}
+            <ResultModal originalArray={originalArray}  sortedArray={sortedArray}  show={showResults}
                          onHide={() => setShowResults(false)}
             />
         </Container>
