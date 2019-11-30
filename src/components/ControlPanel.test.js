@@ -1,9 +1,9 @@
-import React from 'react';
-import {shallow} from 'enzyme';
+import React from "react";
+import {shallow} from "enzyme";
 import ControlPanel from "./ControlPanel";
 import {Button, FormCheck, FormControl} from "react-bootstrap";
 
-it('shows initial values', () => {
+it("shows initial values", () => {
     const wrapper = shallow(
         <ControlPanel
             hasStarted={false}
@@ -18,7 +18,7 @@ it('shows initial values', () => {
     expect(wrapper.find(Button).at(1)).toHaveProp("disabled", "disabled"); // Stop
 });
 
-it('disables panel if has already started', () => {
+it("disables panel if has already started", () => {
     const wrapper = shallow(
         <ControlPanel
             hasStarted={true}
@@ -30,7 +30,7 @@ it('disables panel if has already started', () => {
     expect(wrapper.find(Button).at(0)).toHaveProp("disabled", "disabled"); // Start
 });
 
-it('calls the callbacks for the form changes', () => {
+it("calls the callbacks for the form changes", () => {
     const callback = jest.fn();
 
     const wrapper = shallow(
@@ -42,12 +42,12 @@ it('calls the callbacks for the form changes', () => {
             onSplitArrayChange={callback}
         />);
 
-    wrapper.find(Button).at(0).simulate('click');
-    wrapper.find(Button).at(1).simulate('click');
+    wrapper.find(Button).at(0).simulate("click");
+    wrapper.find(Button).at(1).simulate("click");
 
-    wrapper.find(FormCheck).simulate('change', { target: { checked: true }});
-    wrapper.find(FormControl).at(0).simulate('change', { target: { value: 1 } });
-    wrapper.find(FormControl).at(1).simulate('change', { target: { value: 2 } });
+    wrapper.find(FormCheck).simulate("change", { target: { checked: true }});
+    wrapper.find(FormControl).at(0).simulate("change", { target: { value: 1 } });
+    wrapper.find(FormControl).at(1).simulate("change", { target: { value: 2 } });
 
     expect(callback).toHaveBeenCalledTimes(5);
 });

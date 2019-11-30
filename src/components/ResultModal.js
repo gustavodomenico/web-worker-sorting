@@ -1,6 +1,6 @@
 import React from "react";
 import {Modal, Button} from "react-bootstrap";
-import {Card} from 'react-bootstrap';
+import {Card} from "react-bootstrap";
 import {CSVLink} from "react-csv";
 
 const ResultModal = props =>

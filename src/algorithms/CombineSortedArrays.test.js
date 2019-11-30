@@ -1,6 +1,6 @@
 import CombineSortedArrays from "./CombineSortedArrays";
 
-it('combines multiple arrays', () => {
+it("combines multiple arrays", () => {
     const inputs = [
         [1, 2, 3],
         [2, 3, 4],

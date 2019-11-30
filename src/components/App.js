@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import './App.css';
+import React, {useState} from "react";
+import "./App.css";
 
-import {Card, Container, Row, Col} from 'react-bootstrap';
+import {Card, Container, Row, Col} from "react-bootstrap";
 import ControlPanel from "./ControlPanel";
 import WorkersTable from "./WorkersTable";
 import ResultModal from "./ResultModal";
@@ -27,19 +27,19 @@ function App() {
     const handleStartButtonClick = () => {
         const workers = Configuration.createWorkers(workersCount, splitArray);
 
-        const onWorkerFinished = (id, m) => {
+        const handleWorkerFinished = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
-                {...el, status: 'Done', isFinished: true, sortedArray: m.data.value, endTime: Date.now()} : el));
+                {...el, status: "Done", isFinished: true, sortedArray: m.data.value, endTime: Date.now()} : el));
 
             if (!IsArraySorted.run(sortedArray))
                 throw new Error("Array is not sorted after the worker operation.");
         };
-        const onWorkerProgress = (id, m) => {
+        const handleWorkerProgress = (id, m) => {
             setWorkers(prev => prev.map(el => el.id === id ?
-                {...el, status: 'Working', progress: m.data.value} : el));
+                {...el, status: "Working", progress: m.data.value} : el));
         };
 
-        const onWorkerUpdated = (id, m) => {
+        const handleWorkerUpdated = (id, m) => {
             const lastMessageTime = Date.now() - (m.data.timestamp);
             setWorkers(prev =>
                 prev.map(el => el.id === id ?
@@ -47,7 +47,7 @@ function App() {
                     el));
         };
 
-        webWorkerPool.start(workers, interval, onWorkerFinished, onWorkerProgress, onWorkerUpdated);
+        webWorkerPool.start(workers, interval, handleWorkerFinished, handleWorkerProgress, handleWorkerUpdated);
 
         setStarted(true);
         setWorkers(workers);

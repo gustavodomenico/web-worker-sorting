@@ -8,11 +8,11 @@ export default class WebWorkerPool {
         this.clocks = [];
     }
 
-    start(workers, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerUpdated) {
+    start(workers, newNumberInterval, onWorkerDone, onWorkerProgress, onWorkerUpdated, webWorker) {
         const self = this;
 
         this.webWorkers = workers.map(worker => {
-            const w = WebWorker();
+            const w = webWorker || new WebWorker();
             w.postMessage({message: Messages.START, array: worker.originalArray});
 
             const messageCallbacks = new Map([

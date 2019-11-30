@@ -17,17 +17,15 @@ Enzyne and disabled buttons
 Missing
 
 browser support for workers
-
 method guards asserts
 error handling
 
-check ; consistency
 revisit unit tests (exceptional cases)
-colocar beforeAll com os mocks e variáveis globais
-check "" and '' nos testes e etc
 add snapshopts?
+revisit should nos testes
+revisti o nome evento Updated?! ACK?
 
-stateless compoenents react
+
 
 
 added typescript to avoid warnings

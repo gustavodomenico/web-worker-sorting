@@ -1,7 +1,7 @@
 import React from "react";
 import {Button, ButtonToolbar, ProgressBar, Table} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPause, faPlay, faPoll} from '@fortawesome/free-solid-svg-icons'
+import {faPause, faPlay, faPoll} from "@fortawesome/free-solid-svg-icons"
 
 const WorkersTable = props => {
     const getExecutionTime = worker => {
