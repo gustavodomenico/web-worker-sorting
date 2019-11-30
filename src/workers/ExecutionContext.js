@@ -13,6 +13,8 @@ export default class ExecutionContext {
         let busy = false;
         let index = 0;
 
+        // The only way to listen to new messages is doing the sorting in chunks
+        // and process the new messages in between
         let self = this;
         const processor = setInterval(function () {
             if (!busy && !self.paused) {
@@ -38,8 +40,8 @@ export default class ExecutionContext {
     }
 
     add(data, onNewNumberAdded) {
-        // Given the nature of the single thread execution of the worker, we don't need to pause it
-        // if the message is being processed is because the sorting is not running
+        // Given the nature of the single thread execution of the worker, we don't need to pause it,
+        // if this method is being processed, is because the sorting is not running
         this.array.push(data.value);
         onNewNumberAdded(this.array, data.timestamp);
     }

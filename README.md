@@ -10,14 +10,20 @@ worker-loader not supported
 https://github.com/facebook/create-react-app/issues/1277
 https://stackoverflow.com/questions/42567535/resolving-imports-using-webpacks-worker-loader-in-jest-tests
 
+
+https://github.com/airbnb/enzyme/issues/386
+Enzyne and disabled buttons 
+
 Missing
 
-use a bundler like Webpack
+stateless compoenents react
 browser support for workers
+
 method guards asserts
 error handling
-stateless compoenents react
+
 check ; consistency
-verificar os let x const
-add tooltips to the buttons
 revisit unit tests (exceptional cases)
+
+added typescript to avoid warnings
+https://github.com/facebook/create-react-app/issues/6834

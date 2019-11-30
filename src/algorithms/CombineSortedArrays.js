@@ -1,6 +1,6 @@
 export default class CombineSortedArrays {
     static combine(a, b) {
-        var sorted = [], indexA = 0, indexB = 0;
+        let sorted = [], indexA = 0, indexB = 0;
         while (indexA < a.length && indexB < b.length) {
             if (a[indexA] - b[indexB] > 0) {
                 sorted.push(b[indexB++]);

@@ -20,6 +20,7 @@ const ResultModal = props =>
             </Card>
             }
             <br/>
+            {props.originalArray.length > 0 &&
             <Card bg="light">
                 <Card.Body>
                     <Card.Title>Original Array Sample</Card.Title>
@@ -30,7 +31,9 @@ const ResultModal = props =>
                     </Card.Text>
                 </Card.Body>
             </Card>
+            }
             <br/>
+            {props.sortedArray.length > 0 &&
             <Card bg="light">
                 <Card.Body>
                     <Card.Title>Sorted Array Sample</Card.Title>
@@ -41,6 +44,7 @@ const ResultModal = props =>
                     </Card.Text>
                 </Card.Body>
             </Card>
+            }
         </Modal.Body>
         <Modal.Footer>
             <Button

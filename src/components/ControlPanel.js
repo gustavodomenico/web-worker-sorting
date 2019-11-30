@@ -4,8 +4,8 @@ import {Button, Col, Form, Row} from "react-bootstrap";
 const ControlPanel = props =>
     <Form>
         <Form.Group as={Row}>
-            <Form.Label column sm={3}>Message interval (ms):</Form.Label>
-            <Col sm={9}>
+            <Form.Label column sm={4}>New number interval (ms):</Form.Label>
+            <Col sm={8}>
                 <Form.Control type="number" placeholder="New number interval (ms)"
                               defaultValue={props.newNumberInterval}
                               disabled={props.hasStarted ? "disabled" : ""}
@@ -13,8 +13,8 @@ const ControlPanel = props =>
             </Col>
         </Form.Group>
         <Form.Group as={Row}>
-            <Form.Label column sm={3}>Number of workers:</Form.Label>
-            <Col sm={4}>
+            <Form.Label column sm={4}>Number of workers:</Form.Label>
+            <Col sm={3}>
                 <Form.Control type="number" placeholder="Number of workers"
                               defaultValue={props.workersCount}
                               disabled={props.hasStarted ? "disabled" : ""}

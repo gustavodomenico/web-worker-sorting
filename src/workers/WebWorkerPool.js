@@ -32,7 +32,7 @@ export default class WebWorkerPool {
                     messageCallbacks.get(m.data.message)(worker.id, m);
             };
 
-            let clock = setInterval(function () {
+            const clock = setInterval(function () {
                 w.postMessage({
                     message: Messages.ADD_NUMBER,
                     timestamp: Date.now(),

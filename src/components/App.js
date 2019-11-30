@@ -78,12 +78,12 @@ function App() {
     const handleCombinedResultsButtonClick = workers => {
         setShowResults(true);
 
-        let combinedArray = CombineSortedArrays.run(workers.map(e => e.sortedArray));
+        const combinedArray = CombineSortedArrays.run(workers.map(e => e.sortedArray));
         if (!IsArraySorted.run(combinedArray))
             throw new Error("Array is not sorted after the workers operation.");
         setSortedArray(combinedArray);
 
-        let combineOriginalArray = workers.reduce((a, b) => a.concat(b.originalArray), []);
+        const combineOriginalArray = workers.reduce((a, b) => a.concat(b.originalArray), []);
         setOriginalArray(combineOriginalArray);
 
         setMessagesTimes([]);
