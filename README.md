@@ -4,6 +4,14 @@
 
 ### Table of contents
 
+1. [General Info](#general-info)
+2. [Technologies](#technologies)
+    1. [References](#references)
+3. [Setup](#setup)
+4. [Usage](#usage)
+5. [Implementation](#implementation)
+    1. [Structure](#structure)
+    2. [Testing](#testing)
 ### General Info
 Application to show the usage of web workers and how to have responsive UIs while doing some heavy computation in the background.
 
