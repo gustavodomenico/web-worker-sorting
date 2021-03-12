@@ -53,7 +53,7 @@
     "react-app-polyfill": "^1.0.4",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-csv": "^1.1.2",
-    "react-dev-utils": "^9.1.0",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.12.0",
     "resolve": "1.12.0",
     "resolve-url-loader": "3.1.0",
